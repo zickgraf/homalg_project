@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                sh 'echo hi'
+                sh 'cat /etc/bash.bashrc'
             }
         }
         stage('Test') {
