@@ -11,6 +11,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'cat /etc/bash.bashrc'
+                sh 'pwd'
             }
         }
         stage('Test') {
