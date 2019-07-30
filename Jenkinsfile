@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        state('Preparation')
+        state('Preparation') {
             steps {
                 echo 'Preparation...'
             }
