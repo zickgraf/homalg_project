@@ -13,6 +13,7 @@ pipeline {
                 sh 'cat /etc/bash.bashrc'
                 sh 'pwd'
                 sh 'pwd'
+                sh 'pwd'
             }
         }
         stage('Test') {
