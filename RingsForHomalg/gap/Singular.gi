@@ -575,11 +575,12 @@ proc IndicatorMatrixOfNonZeroEntries(matrix M)\n\
 ##    <Description>
 ##    
 ##      <Listing Type="Code"><![CDATA[
-    BasisOfRowModule := "\n\
-proc BasisOfRowModule (matrix M)\n\
-{\n\
-  return(std(M));\n\
-}\n\n",
+    BasisOfRowModule := """
+proc BasisOfRowModule (matrix M)
+{
+  list GB = myliftstd(M);
+  return(GB[1]);
+}""",
 ##  ]]></Listing>
 ##    </Description>
 ##  </ManSection>
@@ -636,14 +637,9 @@ proc PartiallyReducedBasisOfColumnModule (matrix M)\n\
     BasisOfRowsCoeff := """
 proc BasisOfRowsCoeff (matrix M)
 {
-  matrix B = BasisOfRowModule(M);
-  option(noredSB);
-  matrix T = lift(M,B);
-  option(redSB);
+  matrix B,T = myliftstd(M);
   return(B,T);
-}
-
- """,
+}""",
 ##  ]]></Listing>
 ##    </Description>
 ##  </ManSection>
@@ -1111,6 +1107,338 @@ proc DualKroneckerMat(matrix A, matrix B)
 }
 
  """,
+
+      myliftstd :="""
+// helpers
+proc assert(int condition, string message)
+{
+	if (!condition)
+	{
+		ERROR("could not assert that " + message);
+		quit;
+	}
+}
+
+proc flip(matrix M)
+{
+	return(submat(M, nrows(M)..1, 1..ncols(M)));
+}
+
+proc isZeroMatrix(matrix A)
+{
+	int i;
+	int j;
+	for (i=1; i<=nrows(A); i=i+1)
+	{
+		for (j=1; j<=ncols(A); j=j+1)
+		{
+			if (A[i,j] != 0)
+			{
+				return(0);
+			}
+		}
+	}
+	return(1);
+}
+
+// my implementations
+proc unique_nonzero_index_of_vector(vector v)
+{
+	int pos = 0;
+	for (int i=1; i<=nrows(v); i++)
+	{
+		if (v[i] != 0)
+		{
+			if (pos == 0)
+			{
+				pos = i;
+			}
+			else
+			{
+				ERROR("vector has more than one nonzero entry");
+			}
+		}
+	}
+	if (pos == 0)
+	{
+		print(v);
+		ERROR("vector has no nonzero entry");
+	}
+
+	return(pos);
+}
+
+proc minimal_generators_of_monomial_quotient(leading_terms, leading_term_positions, current_i)
+{
+	list generators;
+	int i;
+	int j;
+	vector m_i;
+	vector l;
+	poly generator;
+	int is_min_gen;
+
+	poly divisor_entry = leading_terms[current_i];
+	int divisor_pos = leading_term_positions[current_i];
+
+	poly dividend_entry;
+	int dividend_pos;
+	for (i=1;i<=(current_i-1);i++)
+	{
+		dividend_pos = leading_term_positions[i];
+		if (dividend_pos == divisor_pos)
+		{
+			dividend_entry = leading_terms[i];
+			generator = lcm(dividend_entry, divisor_entry) / divisor_entry;
+
+			is_min_gen = 1;
+			for (j=1; j<=size(generators); j++)
+			{
+				if (generator/generators[j] != 0)
+				{
+					is_min_gen = 0;
+					break;
+				}
+			}
+			if (is_min_gen)
+			{
+				generators[size(generators)+1] = leadmonom(generator);
+			}
+		}
+	}
+
+	return(generators);
+}
+
+proc m(leading_terms, leading_term_positions, j, i)
+{
+	int posj = leading_term_positions[j];
+	int posi = leading_term_positions[i];
+	
+	if (posj != posi)
+	{
+		return(0);
+	}
+	else
+	{
+		return(lcm(leading_terms[j], leading_terms[i]) / leading_terms[i]);
+	}
+}
+
+proc idd(vector g, F, leading_terms, leading_term_positions)
+{
+	int i;
+	vector f;
+	matrix G[size(F)][1];
+	
+	vector h = g;
+	vector leading_term = lead(h);
+	int pos = unique_nonzero_index_of_vector(leading_term);
+	poly entry;
+	poly quot;
+	int modified_G = 1;
+	while (h != 0 and modified_G)
+	{
+		modified_G = 0;
+		for (i=1; i<=size(F); i++)
+		{
+			if (pos == leading_term_positions[i])
+			{
+				entry = leading_term[pos];
+				quot = entry/leading_terms[i];
+				if (quot != 0)
+				{
+					G[i,1] = G[i,1] + quot;
+					h = h - quot * F[i];
+					if (h == 0)
+					{
+						break;
+					}
+					leading_term = lead(h);
+					pos = unique_nonzero_index_of_vector(leading_term);
+					modified_G = 1;
+				}
+			}
+		}
+	}
+	
+	return(G,h);
+}
+
+proc myliftstd(matrix A)
+{
+	module F = module(A);
+	module result;
+	
+	int i;
+	int k;
+	int j;
+	int a;
+
+	list leading_terms;
+	list leading_term_positions;
+	vector leading_term;
+	int pos;
+	
+	poly m_ji;
+	poly m_ij;
+	vector S;
+	vector h;
+	matrix current_T;
+	// matrix T = unitmat(ncols(A));
+	list gens;
+	poly generator;
+	list division_result;
+
+	// initialize result with F[1]
+	int l = 1;
+	result[l] = F[1];
+	leading_term = lead(F[1]);
+	pos = unique_nonzero_index_of_vector(leading_term);
+	leading_terms[l] = leading_term[pos];
+	leading_term_positions[l] = pos;
+	matrix T[ncols(A)][1];
+	T[1,1] = 1;
+
+	module known_GB = std(A);
+	int already_found = 0;
+
+	for (a=2; a<=size(F); a++)
+	{
+		//# print("#########################################################################################");
+		division_result = idd(F[a], result, leading_terms, leading_term_positions);
+		h = division_result[2];
+		if (h == 0)
+		{
+			if (1)
+			{
+				if (isZeroMatrix(reduce(known_GB, result)))
+				{
+					//#print("found GB");
+					already_found = 1;
+					break;
+				}
+			}
+
+			//#print("skip add F[" + string(a) + "]");
+			a++;
+			continue;
+		}
+
+		l++;
+		//#print("add reduction of F[" + string(a) + "] as " + string(l) + "-th element to result:");
+		//# print(h);
+		result[l] = h;
+		leading_term = lead(h);
+		pos = unique_nonzero_index_of_vector(leading_term);
+		leading_terms[l] = leading_term[pos];
+		leading_term_positions[l] = pos;
+		
+		current_T = T*division_result[1];
+		current_T = -current_T;
+		current_T[a,1] = current_T[a,1] + 1;
+		T = concat(T, current_T);
+	}
+	
+	//#print("start actual computation");
+
+	h = 1;
+
+	if(already_found)
+	{
+		h = 0;
+	}
+	
+	while (h != 0)
+	{
+		for	(i=2; i<=l; i++)
+		{
+			//#print("progress: " + string(i) + " of " + string(l));
+			gens = minimal_generators_of_monomial_quotient(leading_terms, leading_term_positions, i);
+			for (k=1; k<=size(gens); k++)
+			{
+				generator = gens[k];
+				for (j=1; j<=(i-1); j++)
+				{
+					if (leadmonom(m(leading_terms, leading_term_positions, j, i)) == generator)
+					{
+						break;
+					}
+				}
+
+				m_ji = m(leading_terms, leading_term_positions, j, i);
+				m_ij = m(leading_terms, leading_term_positions, i, j);
+				S = m_ji * result[i] - m_ij * result[j];
+
+				if (S == 0)
+				{
+					//# print(i);
+					//# print(j);
+					//# print(m_ji);
+					//# print(m_ij);
+					//# print(result[i]);
+					//# print(result[j]);
+					//# print("ERROR");
+					//# print("result[" + string(i) + "]=");
+					//# print(result[i]);
+					//# print("result[" + string(j) + "]=");
+					//# print(result[j]);
+					k++;
+					continue;
+				}
+
+				division_result = idd(S, result, leading_terms, leading_term_positions);
+				h = division_result[2];
+				
+				if (h != 0)
+				{
+					l++;
+					result[l] = h;
+					leading_term = lead(h);
+					pos = unique_nonzero_index_of_vector(leading_term);
+					leading_terms[l] = leading_term[pos];
+					leading_term_positions[l] = pos;
+					//#print("add");
+					//# print(h);
+					//#print("as " + string(l) + "-th element to result");
+					
+					current_T = T*division_result[1];
+					current_T = -current_T;
+					current_T[i,1] = current_T[i,1] + m_ji;
+					current_T[j,1] = current_T[j,1] - m_ij;
+					T = concat(T, current_T);
+					
+					break;
+				}
+			}
+			if (h != 0)
+			{
+				break;
+			}
+		}
+
+		if (1)
+		{
+			if (isZeroMatrix(reduce(known_GB, result)))
+			{
+				//#print("found GB");
+				break;
+			}
+		}
+	}
+
+
+	// assert that result is a Groebner basis for A
+	assert(isZeroMatrix(reduce(known_GB, result)), "result is a Groebner basis for A");
+	// assert that T is a transformation matrix
+	assert(A * T == matrix(result), "T is a transformation matrix");
+
+	list L = result,T;
+	
+	return(L);
+}
+
+ """, #"
 
     )
 
