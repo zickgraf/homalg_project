@@ -108,6 +108,28 @@ BasisOfRowsCoeff :=
     return N;
     
   end,
+
+RelativeBasisOfRowsCoeff :=
+  function( M, T, limit )
+    local v, N;
+    
+    v := homalgStream( HomalgRing( M ) )!.variable_name;
+    
+    N := HomalgVoidMatrix(
+      "unknown_number_of_rows",
+      NrColumns( M ),
+      HomalgRing( M )
+    );
+    
+    homalgSendBlocking(
+      [ "matrix ", N, T, " = RelativeBasisOfRowsCoeff(", M, limit, ")" ],
+      "need_command",
+      "BasisCoeff"
+    );
+    
+    return N;
+    
+  end,
 ##  ]]></Listing>
 ##    </Description>
 ##  </ManSection>
