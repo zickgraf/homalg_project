@@ -79,7 +79,7 @@ pipeline {
 				}
 
 				dir('pkg/homalg_project') {
-					sh 'make --trace -j $(nproc) --output-sync ci-test'
+					sh 'make --trace -k -i -j $(nproc) --output-sync ci-test || true'
 				}
 			}
 		}
