@@ -2645,7 +2645,7 @@ InstallMethod( \/,
         [ IsHomalgExternalRingInSingularRep and IsFreePolynomialRing, IsHomalgRingRelations ],
     function( R, ring_rel )
         
-        #Display( "using Singular QRing" );
+        Display( "using Singular QRing" );
         
         return QRing( R, ring_rel );
         

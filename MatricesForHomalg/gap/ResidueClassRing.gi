@@ -567,6 +567,8 @@ InstallMethod( \/, ## this operation is declared in the file HomalgRelations.gd
   function( R, ring_rel )
     local A, RP, S, mat, rel, left, rel_old, mat_old, left_old, c, param, paramS;
     
+    Display( "using regular ResidueClassRing " );
+    
     if IsHomalgResidueClassRingRep( R ) then
         A := AmbientRing( R );
     else
