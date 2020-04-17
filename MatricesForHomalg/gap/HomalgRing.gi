@@ -2641,6 +2641,11 @@ InstallGlobalFunction( HomalgRingElement,
     nargs := Length( arg );
     
     R := arg[nargs];
+
+    if IsBound( IsHomalgExternalRingInSingularRep ) and IsBound( IsHomalgResidueClassRingRep ) and ValueGlobal("IsHomalgExternalRingInSingularRep")(R) and ValueGlobal("IsHomalgResidueClassRingRep")(R) then
+        arg[1] := ReplacedString(arg[1], "|[ ", "");
+        arg[1] := ReplacedString(arg[1], " ]|", "");
+    fi;
     
     if HasRingElementConstructor( R ) then
         return CallFuncList( RingElementConstructor( R ), arg );
