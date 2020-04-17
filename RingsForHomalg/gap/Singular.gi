@@ -2428,7 +2428,9 @@ InstallMethod( HomalgQRingInSingular,
     ## for the view methods:
     ## <A Singular q ring>
     ## <A matrix over a Singular q ring>
-    S!.description := " Singular q";
+    S!.description := " residue class";
+    
+    SetFilterObj( S, IsHomalgResidueClassRingRep );
     
     SetAmbientRing( S, R );
     
@@ -2481,7 +2483,14 @@ InstallMethod( HomalgQRingInSingular,
     
     homalgStream( S ).setinvol( S );
     
-    RP!.IsZero := r -> homalgSendBlocking( [ "reduce(", r, ",std(0))==0" ] , "need_output", "IsZero" ) = "1";
+    RP!.IsZero := function( r )
+        
+        # compatibility with ResidueClassRings
+        BasisOfRowModule( MatrixOfRelations( S ) );
+        
+        return homalgSendBlocking( [ "reduce(", r, ",std(0))==0" ] , "need_output", "IsZero" ) = "1";
+        
+    end;
     
     RP!.IsOne := r -> homalgSendBlocking( [ "reduce(", r, ",std(0))==1" ] , "need_output", "IsOne" ) = "1";
     
@@ -2600,6 +2609,38 @@ InstallMethod( HomalgQRingInSingular,
   function( R, ring_rel )
     
     return HomalgQRingInSingular( R, HomalgRingElement( ring_rel, R ) );
+    
+end );
+
+##
+InstallMethod( \/,
+        "for homalg rings in Singular",
+        [ IsHomalgExternalRingInSingularRep and IsFreePolynomialRing, IsHomalgRingRelations ],
+    function( R, ring_rel )
+        
+        #Display( "using Singular QRing" );
+        
+        return QRing( R, ring_rel );
+        
+    end );
+
+##
+InstallMethod( Display,
+        [ IsHomalgExternalRingInSingularRep and IsHomalgResidueClassRingRep ],
+    function( R )
+        
+        Display( "<A residue class ring>" );
+        
+    end );
+        
+##
+InstallMethod( homalgSetName,
+        "for homalg external ring elements",
+        [ IsHomalgExternalRingElementRep, IsString, IsHomalgExternalRingRep and IsHomalgExternalRingInSingularRep and IsHomalgResidueClassRingRep ],
+        
+  function( r, name, R )
+    
+    SetName( r, Concatenation( [ "|[ ", homalgSendBlocking( [ r ], "need_output", "homalgSetName" ), " ]|" ] ) );
     
 end );
 
