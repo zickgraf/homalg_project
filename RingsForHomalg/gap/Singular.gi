@@ -578,7 +578,9 @@ proc IndicatorMatrixOfNonZeroEntries(matrix M)\n\
     BasisOfRowModule := "\n\
 proc BasisOfRowModule (matrix M)\n\
 {\n\
-  return(std(M));\n\
+  matrix G = std(M);\n\
+  attrib(G, \"isSB\", 1);\n\
+  return(G);\n\
 }\n\n",
 ##  ]]></Listing>
 ##    </Description>
@@ -719,9 +721,9 @@ proc DecideZeroColumns (matrix A, matrix B)\n\
 ##    
 ##      <Listing Type="Code"><![CDATA[
     DecideZeroRowsEffectively := """
-proc DecideZeroRowsEffectively (matrix A, module B)
+proc DecideZeroRowsEffectively (matrix A, matrix B)
 {
-  attrib(B,"isSB",1);
+  if(attrib(B,"isSB") != 1) { print("B is not a standard basis"); quit; }
   matrix M = reduce(A,B);
   matrix T = lift(B,M-A);
   return(M,T);
@@ -743,7 +745,9 @@ proc DecideZeroRowsEffectively (matrix A, module B)
     DecideZeroColumnsEffectively := """
 proc DecideZeroColumnsEffectively (matrix A, matrix B)
 {
-  matrix M,T = DecideZeroRowsEffectively(Involution(A),Involution(B));
+  matrix asd = Involution(B);
+  attrib(asd,"isSB",1);
+  matrix M,T = DecideZeroRowsEffectively(Involution(A),asd);
   return(Involution(M),Involution(T));
 }
 
