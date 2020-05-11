@@ -66,6 +66,9 @@ InstallValue( HOMALG_IO,
                 ## version:
                 version                                 := "ver",
                 
+                ## set option:
+                option                                  := "opt",
+                
                 ## unknown:
                 unknown                                 := "???",
                 
