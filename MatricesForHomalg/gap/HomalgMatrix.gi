@@ -1272,7 +1272,30 @@ InstallMethod( UnionOfRowsOp,
         [ IsHomalgRing, IsInt, IsList ],
 
   function( R, nr_cols, L )
-    local result;
+    local result, underlying_union_of_rows;
+
+    L := Concatenation( List( L, function( l )
+        if HasEvalUnionOfRows( l ) then
+            return EvalUnionOfRows( l );
+        else
+            return [ l ];
+        fi;
+    end ) );
+
+    #if ForAll( L, x -> HasEvalCoefficientsWithGivenMonomials( x ) and EvalCoefficientsWithGivenMonomials( x )[2] = EvalCoefficientsWithGivenMonomials( L[1] )[2] ) then
+    if ForAll( L, x -> HasEvalCoefficientsWithGivenMonomials( x ) ) then
+        
+        underlying_union_of_rows := UnionOfRows( List( L, x -> EvalCoefficientsWithGivenMonomials( x )[1] ) );
+
+        return CoefficientsWithGivenMonomials( underlying_union_of_rows, EvalCoefficientsWithGivenMonomials( L[1] )[2] );
+        
+    fi;
+    
+    #if ForAll( L, x -> HasEvalUnionOfColumns( x ) and List( EvalUnionOfColumns( x ), y -> NrColumns( y ) ) = List( EvalUnionOfColumns( L[1] ), y -> NrColumns( y ) ) ) then
+    #    
+    #    return UnionOfColumns( List( [ 1 .. Length( EvalUnionOfColumns( L[1] ) ) ], c -> UnionOfRows( List( L, x -> EvalUnionOfColumns( x )[c] ) ) ) );
+    #    
+    #fi;
     
     result := HomalgMatrixWithAttributes( [
          EvalUnionOfRows, L,
@@ -1379,7 +1402,23 @@ InstallMethod( UnionOfColumnsOp,
         [ IsHomalgRing, IsInt, IsList ],
 
   function( R, nr_rows, L )
-    local result;
+    local result, underlying_union_of_columns, diag_mat;
+    
+    #if ForAll( L, x -> HasEvalUnionOfColumns( x ) ) then
+    #    
+    #    return UnionOfColumns( Concatenation( List( L, x -> EvalUnionOfColumns( x ) ) ) );
+    #    
+    #fi;
+
+    if ForAll( L, x -> HasEvalCoefficientsWithGivenMonomials( x ) ) then
+        
+        underlying_union_of_columns := UnionOfColumns( List( L, x -> EvalCoefficientsWithGivenMonomials( x )[1] ) );
+        
+        diag_mat := DiagMat( List( L, x -> EvalCoefficientsWithGivenMonomials( x )[2] ) );
+
+        return CoefficientsWithGivenMonomials( underlying_union_of_columns, diag_mat );
+        
+    fi;
     
     result := HomalgMatrixWithAttributes( [
          EvalUnionOfColumns, L,
