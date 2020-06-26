@@ -8173,3 +8173,77 @@ InstallMethod( RingMapOntoSimplifiedResidueClassRing,
     return pi;
     
 end );
+
+
+DeclareOperation( "DisplayGenesisAlongFirstParent", [ IsHomalgMatrix ] );
+
+InstallMethod( DisplayGenesisAlongFirstParent,
+    [ IsHomalgMatrix ],
+  function( M )
+    
+    Display( InfoOfObject( M ) );
+    LAST_MATRIX_OF_GENESIS := M;
+    
+end );
+
+#InstallMethod( DisplayGenesisAlongFirstParent,
+#    [ IsHomalgMatrix and HasEval ],
+#  function( M )
+#    
+#    Display( "an evaluated homalg matrix" );
+#    
+#end );
+
+InstallMethod( DisplayGenesisAlongFirstParent,
+    [ IsHomalgMatrix and HasEvalUnionOfRows ],
+  function( M )
+    
+    Display( "UnionOfRows of" );
+    DisplayGenesisAlongFirstParent( EvalUnionOfRows( M )[1] );
+    
+end );
+
+InstallMethod( DisplayGenesisAlongFirstParent,
+    [ IsHomalgMatrix and HasEvalUnionOfColumns ],
+  function( M )
+    
+    Display( "UnionOfColumns of" );
+    DisplayGenesisAlongFirstParent( EvalUnionOfColumns( M )[1] );
+    
+end );
+
+#InstallMethod( DisplayGenesisAlongFirstParent,
+#    [ IsHomalgMatrix and HasEvalCoercedMatrix ],
+#  function( M )
+#    
+#    Display( "CoercedMatrix of" );
+#    DisplayGenesisAlongFirstParent( EvalCoercedMatrix( M ) );
+#    
+#end );
+
+InstallMethod( DisplayGenesisAlongFirstParent,
+    [ IsHomalgMatrix and HasEvalCoefficientsWithGivenMonomials ],
+  function( M )
+    
+    Display( "CoefficientsWithGivenMonomials of" );
+    DisplayGenesisAlongFirstParent( EvalCoefficientsWithGivenMonomials( M )[1] );
+    
+end );
+
+InstallMethod( DisplayGenesisAlongFirstParent,
+    [ IsHomalgMatrix and HasEvalCertainRows ],
+  function( M )
+    
+    Display( "CertainRows of" );
+    DisplayGenesisAlongFirstParent( EvalCertainRows( M )[1] );
+    
+end );
+
+InstallMethod( DisplayGenesisAlongFirstParent,
+    [ IsHomalgMatrix and HasEvalCertainColumns ],
+  function( M )
+    
+    Display( "CertainColumns of" );
+    DisplayGenesisAlongFirstParent( EvalCertainColumns( M )[1] );
+    
+end );
