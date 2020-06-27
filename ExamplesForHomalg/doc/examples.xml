@@ -16,20 +16,13 @@ This chapter gives examples for the usage of this package.
 <Section Label="SpectralFiltrations">
 <Heading>Spectral Filtrations</Heading>
 
-<#Include Label="ExtExt">
-<#Include Label="Purity">
 <#Include Label="A3_Purity">
-<#Include Label="TorExt-Grothendieck">
-<#Include Label="TorExt">
-<#Include Label="CodegreeOfPurity">
-<#Include Label="HomHom">
 
 </Section>
 
 <Section Label="CommutativeAlgebra">
 <Heading>Commutative Algebra</Heading>
 
-<#Include Label="Eliminate">
 
 </Section>
 <!-- ############################################################ -->

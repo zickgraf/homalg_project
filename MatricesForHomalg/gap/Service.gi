@@ -3033,7 +3033,15 @@ InstallMethod( DecideZeroRowsEffectively, ### defines: DecideZeroRowsEffectively
     
     C := HomalgVoidMatrix( R );
     
+    #if IsBound( RP!.TurnOffRedSB ) then
+    #    RP!.TurnOffRedSB( R );
+    #fi;
+    
     CB := NonReducedBasisOfRowsCoeff( B, C );
+    
+    #if IsBound( RP!.TurnOnRedSB ) then
+    #    RP!.TurnOnRedSB( R );
+    #fi;
     
     ## knowing this will avoid computations
     IsOne( CB );
@@ -3238,7 +3246,15 @@ InstallMethod( DecideZeroColumnsEffectively, ### defines: DecideZeroColumnsEffec
     
     C := HomalgVoidMatrix( R );
     
+    #if IsBound( RP!.TurnOffRedSB ) then
+    #    RP!.TurnOffRedSB( R );
+    #fi;
+    
     BC := NonReducedBasisOfColumnsCoeff( B, C );
+    
+    #if IsBound( RP!.TurnOnRedSB ) then
+    #    RP!.TurnOnRedSB( R );
+    #fi;
     
     ## knowing this will avoid computations
     IsOne( BC );

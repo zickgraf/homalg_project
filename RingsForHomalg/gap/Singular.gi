@@ -695,14 +695,18 @@ proc BasisOfRowsCoeff (matrix M)
 ##    <Description>
 ##    
 ##      <Listing Type="Code"><![CDATA[
-    NonReducedBasisOfRowsCoeff := "\n\
-proc NonReducedBasisOfRowsCoeff (matrix M)\n\
-{\n\
-  matrix B = NonReducedBasisOfRowModule(M);\n\
-  matrix T = lift(M,B);\n\
-  list l = B,T;\n\
-  return(l)\n\
-}\n\n",
+    NonReducedBasisOfRowsCoeff := """
+proc NonReducedBasisOfRowsCoeff (matrix M)
+{
+  matrix B = BasisOfRowModule(M);
+  option(noredSB);
+  matrix T = lift(M,B);
+  option(redSB);
+  list l = B,T;
+  return(l)
+}
+
+ """,
 ##  ]]></Listing>
 ##    </Description>
 ##  </ManSection>
@@ -803,7 +807,9 @@ proc DecideZeroRowsEffectively (matrix A, module B)
 {
   attrib(B,"isSB",1);
   matrix M = reduce(A,B);
+  option(noredSB);
   matrix T = lift(B,M-A);
+  option(redSB);
   return(M,T);
 }
 
