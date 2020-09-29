@@ -3273,74 +3273,74 @@ end );
 # SyzygiesGeneratorsOfRows
 #-----------------------------------
 
-##
-InstallMethod( SyzygiesGeneratorsOfRows,
-        "LIMAT: for homalg matrices (check input)",
-        [ IsHomalgMatrix, IsHomalgMatrix ], 10001,
-        
-  function( M1, M2 )
-    
-    if not IsIdenticalObj( HomalgRing( M1 ), HomalgRing( M2 ) ) then
-        Error( "the two matrices are not defined over identically the same ring\n" );
-    fi;
-    
-    if NumberColumns( M1 ) <> NumberColumns( M2 ) then
-        Error( "the number of columns of the two matrices must coincide\n" );
-    fi;
-    
-    TryNextMethod( );
-    
-end );
-
-##
-InstallMethod( SyzygiesGeneratorsOfRows,
-        "LIMAT: for homalg matrices",
-        [ IsHomalgMatrix, IsHomalgMatrix ],
-        
-  function( M1, M2 )
-    
-    if IsIdenticalObj( M1, M2 ) then
-        
-        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfRows( M, M )", "\033[0m" );
-        
-        return HomalgIdentityMatrix( NumberRows( M1 ), HomalgRing( M1 ) );
-        
-    fi;
-    
-    TryNextMethod( );
-    
-end );
-
-##
-InstallMethod( SyzygiesGeneratorsOfRows,
-        "LIMAT: for homalg matrices (IsLeftRegular)",
-        [ IsHomalgMatrix and IsLeftRegular ],
-        
-  function( M )
-    
-    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfRows( IsLeftRegular )", "\033[0m" );
-    
-    return HomalgZeroMatrix( 0, NumberRows( M ), HomalgRing( M ) );
-    
-end );
-
-##
-InstallMethod( SyzygiesGeneratorsOfRows,
-        "LIMAT: for homalg matrices (IsOne)",
-        [ IsHomalgMatrix and IsOne, IsHomalgMatrix ],
-        
-  function( M1, M2 )
-    
-    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfRows(IsOne(Matrix),IsHomalgMatrix)", "\033[0m" );
-    
-    return M2;
-    
-end );
+###
+#InstallMethod( SyzygiesGeneratorsOfRows,
+#        "LIMAT: for homalg matrices (check input)",
+#        [ IsHomalgMatrix, IsHomalgMatrix ], 10001,
+#        
+#  function( M1, M2 )
+#    
+#    if not IsIdenticalObj( HomalgRing( M1 ), HomalgRing( M2 ) ) then
+#        Error( "the two matrices are not defined over identically the same ring\n" );
+#    fi;
+#    
+#    if NumberColumns( M1 ) <> NumberColumns( M2 ) then
+#        Error( "the number of columns of the two matrices must coincide\n" );
+#    fi;
+#    
+#    TryNextMethod( );
+#    
+#end );
+#
+###
+#InstallMethod( SyzygiesGeneratorsOfRows,
+#        "LIMAT: for homalg matrices",
+#        [ IsHomalgMatrix, IsHomalgMatrix ],
+#        
+#  function( M1, M2 )
+#    
+#    if IsIdenticalObj( M1, M2 ) then
+#        
+#        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfRows( M, M )", "\033[0m" );
+#        
+#        return HomalgIdentityMatrix( NumberRows( M1 ), HomalgRing( M1 ) );
+#        
+#    fi;
+#    
+#    TryNextMethod( );
+#    
+#end );
+#
+###
+#InstallMethod( SyzygiesGeneratorsOfRows,
+#        "LIMAT: for homalg matrices (IsLeftRegular)",
+#        [ IsHomalgMatrix and IsLeftRegular ],
+#        
+#  function( M )
+#    
+#    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfRows( IsLeftRegular )", "\033[0m" );
+#    
+#    return HomalgZeroMatrix( 0, NumberRows( M ), HomalgRing( M ) );
+#    
+#end );
+#
+###
+#InstallMethod( SyzygiesGeneratorsOfRows,
+#        "LIMAT: for homalg matrices (IsOne)",
+#        [ IsHomalgMatrix and IsOne, IsHomalgMatrix ],
+#        
+#  function( M1, M2 )
+#    
+#    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfRows(IsOne(Matrix),IsHomalgMatrix)", "\033[0m" );
+#    
+#    return M2;
+#    
+#end );
 
 ##
 InstallMethod( SyzygiesGeneratorsOfRows,
         "LIMAT: for homalg matrices (IsZero)",
-        [ IsHomalgMatrix, IsHomalgMatrix and IsZero ],
+        [ IsHomalgMatrix, IsHomalgMatrix and IsZero and IsEmptyMatrix ],
         
   function( M1, M2 )
     
@@ -3353,7 +3353,7 @@ end );
 ##
 InstallMethod( SyzygiesGeneratorsOfRows,
         "LIMAT: for homalg matrices (IsZero)",
-        [ IsHomalgMatrix and IsZero ],
+        [ IsHomalgMatrix and IsZero and IsEmptyMatrix ],
         
   function( M )
     
@@ -3366,7 +3366,7 @@ end );
 ##
 InstallMethod( SyzygiesGeneratorsOfRows,
         "LIMAT: for homalg matrices (IsZero)",
-        [ IsHomalgMatrix and IsZero, IsHomalgMatrix ],
+        [ IsHomalgMatrix and IsZero and IsEmptyMatrix, IsHomalgMatrix ],
         
   function( M1, M2 )
     
@@ -3380,74 +3380,74 @@ end );
 # SyzygiesGeneratorsOfColumns
 #-----------------------------------
 
-##
-InstallMethod( SyzygiesGeneratorsOfColumns,
-        "LIMAT: for homalg matrices (check input)",
-        [ IsHomalgMatrix, IsHomalgMatrix ], 10001,
-        
-  function( M1, M2 )
-    
-    if not IsIdenticalObj( HomalgRing( M1 ), HomalgRing( M2 ) ) then
-        Error( "the two matrices are not defined over identically the same ring\n" );
-    fi;
-    
-    if NumberRows( M1 ) <> NumberRows( M2 ) then
-        Error( "the number of rows of the two matrices must coincide\n" );
-    fi;
-    
-    TryNextMethod( );
-    
-end );
-
-##
-InstallMethod( SyzygiesGeneratorsOfColumns,
-        "LIMAT: for homalg matrices",
-        [ IsHomalgMatrix, IsHomalgMatrix ],
-        
-  function( M1, M2 )
-    
-    if IsIdenticalObj( M1, M2 ) then
-        
-        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfColumns( M, M )", "\033[0m" );
-        
-        return HomalgIdentityMatrix( NumberColumns( M1 ), HomalgRing( M1 ) );
-        
-    fi;
-    
-    TryNextMethod( );
-    
-end );
-
-##
-InstallMethod( SyzygiesGeneratorsOfColumns,
-        "LIMAT: for homalg matrices (IsRightRegular)",
-        [ IsHomalgMatrix and IsRightRegular ],
-        
-  function( M )
-    
-    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfColumns( IsRightRegular )", "\033[0m" );
-    
-    return HomalgZeroMatrix( NumberColumns( M ), 0, HomalgRing( M ) );
-    
-end );
-
-##
-InstallMethod( SyzygiesGeneratorsOfColumns,
-        "LIMAT: for homalg matrices (IsOne)",
-        [ IsHomalgMatrix and IsOne, IsHomalgMatrix ],
-        
-  function( M1, M2 )
-    
-    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfColumns(IsOne(Matrix),IsHomalgMatrix)", "\033[0m" );
-    
-    return M2;
-    
-end );
+###
+#InstallMethod( SyzygiesGeneratorsOfColumns,
+#        "LIMAT: for homalg matrices (check input)",
+#        [ IsHomalgMatrix, IsHomalgMatrix ], 10001,
+#        
+#  function( M1, M2 )
+#    
+#    if not IsIdenticalObj( HomalgRing( M1 ), HomalgRing( M2 ) ) then
+#        Error( "the two matrices are not defined over identically the same ring\n" );
+#    fi;
+#    
+#    if NumberRows( M1 ) <> NumberRows( M2 ) then
+#        Error( "the number of rows of the two matrices must coincide\n" );
+#    fi;
+#    
+#    TryNextMethod( );
+#    
+#end );
+#
+###
+#InstallMethod( SyzygiesGeneratorsOfColumns,
+#        "LIMAT: for homalg matrices",
+#        [ IsHomalgMatrix, IsHomalgMatrix ],
+#        
+#  function( M1, M2 )
+#    
+#    if IsIdenticalObj( M1, M2 ) then
+#        
+#        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfColumns( M, M )", "\033[0m" );
+#        
+#        return HomalgIdentityMatrix( NumberColumns( M1 ), HomalgRing( M1 ) );
+#        
+#    fi;
+#    
+#    TryNextMethod( );
+#    
+#end );
+#
+###
+#InstallMethod( SyzygiesGeneratorsOfColumns,
+#        "LIMAT: for homalg matrices (IsRightRegular)",
+#        [ IsHomalgMatrix and IsRightRegular ],
+#        
+#  function( M )
+#    
+#    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfColumns( IsRightRegular )", "\033[0m" );
+#    
+#    return HomalgZeroMatrix( NumberColumns( M ), 0, HomalgRing( M ) );
+#    
+#end );
+#
+###
+#InstallMethod( SyzygiesGeneratorsOfColumns,
+#        "LIMAT: for homalg matrices (IsOne)",
+#        [ IsHomalgMatrix and IsOne, IsHomalgMatrix ],
+#        
+#  function( M1, M2 )
+#    
+#    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesGeneratorsOfColumns(IsOne(Matrix),IsHomalgMatrix)", "\033[0m" );
+#    
+#    return M2;
+#    
+#end );
 
 ##
 InstallMethod( SyzygiesGeneratorsOfColumns,
         "LIMAT: for homalg matrices (IsZero)",
-        [ IsHomalgMatrix, IsHomalgMatrix and IsZero ],
+        [ IsHomalgMatrix, IsHomalgMatrix and IsZero and IsEmptyMatrix ],
         
   function( M1, M2 )
     
@@ -3460,7 +3460,7 @@ end );
 ##
 InstallMethod( SyzygiesGeneratorsOfColumns,
         "LIMAT: for homalg matrices (IsZero)",
-        [ IsHomalgMatrix and IsZero ],
+        [ IsHomalgMatrix and IsZero and IsEmptyMatrix ],
         
   function( M )
     
@@ -3473,7 +3473,7 @@ end );
 ##
 InstallMethod( SyzygiesGeneratorsOfColumns,
         "LIMAT: for homalg matrices (IsZero)",
-        [ IsHomalgMatrix and IsZero, IsHomalgMatrix ],
+        [ IsHomalgMatrix and IsZero and IsEmptyMatrix, IsHomalgMatrix ],
         
   function( M1, M2 )
     
