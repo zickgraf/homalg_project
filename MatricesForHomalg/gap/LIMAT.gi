@@ -3560,6 +3560,24 @@ InstallMethod( SyzygiesOfRows,
     
 end );
 
+##
+InstallMethod( SyzygiesOfRows,
+        "LIMAT: for HasEvalKroneckerMat",
+        [ IsHomalgMatrix and HasEvalKroneckerMat ],
+        
+  function( M )
+    
+    Error( "SyzygiesOfRows" );
+    
+    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfRows(KroneckerMat(Matrix))", "\033[0m" );
+    
+    A := EvalKroneckerMat( M )[1];
+    B := EvalKroneckerMat( M )[2];
+    
+    return UnionOfRows( SyzygiesOfRows( A ), SyzygiesOfRows( B ) );
+    
+end );
+
 #-----------------------------------
 # SyzygiesOfColumns
 #-----------------------------------
@@ -3574,6 +3592,24 @@ InstallMethod( SyzygiesOfColumns,
     Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfColumns(IsHomalgMatrix,IsZero(Matrix))", "\033[0m" );
     
     return SyzygiesOfColumns( M1 );
+    
+end );
+
+##
+InstallMethod( SyzygiesOfColumns,
+        "LIMAT: for HasEvalKroneckerMat",
+        [ IsHomalgMatrix and HasEvalKroneckerMat ],
+        
+  function( M )
+
+    Error( "SyzygiesOfColumns" );
+    
+    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfColumns(KroneckerMat(Matrix))", "\033[0m" );
+    
+    A := EvalKroneckerMat( M )[1];
+    B := EvalKroneckerMat( M )[2];
+    
+    return UnionOfColumns( SyzygiesOfColumns( A ), SyzygiesOfColumns( B ) );
     
 end );
 
