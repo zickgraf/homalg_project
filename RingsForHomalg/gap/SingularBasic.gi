@@ -137,6 +137,43 @@ BasisOfRowsCoeff :=
 ##  </ManSection>
 ##  <#/GAPDoc>
 
+##  <#GAPDoc Label="NonReducedBasisOfRowsCoeff:Singular">
+##  <ManSection>
+##    <Func Arg="M, T" Name="NonReducedBasisOfRowsCoeff" Label="in the homalg table for Singular"/>
+##    <Returns></Returns>
+##    <Description>
+##      This is the entry of the &homalg; table, which calls the corresponding macro <Ref Func="NonReducedBasisOfRowsCoeff" Label="Singular macro"/> inside the computer algebra system.
+##      <Listing Type="Code"><![CDATA[
+NonReducedBasisOfRowsCoeff :=
+  function( M, T )
+    local v, N;
+    
+    v := homalgStream( HomalgRing( M ) )!.variable_name;
+    
+    N := HomalgVoidMatrix(
+      "unknown_number_of_rows",
+      NrColumns( M ),
+      HomalgRing( M )
+    );
+    
+    homalgSendBlocking(
+      [
+        "list ", v, "l=NonReducedBasisOfRowsCoeff(", M, "); ",
+        "matrix ", N, " = ", v, "l[1]; ",
+        "matrix ", T, " = ", v, "l[2]"
+      ],
+      "need_command",
+      "BasisCoeff"
+    );
+    
+    return N;
+    
+  end,
+##  ]]></Listing>
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+
 ##  <#GAPDoc Label="BasisOfColumnsCoeff:Singular">
 ##  <ManSection>
 ##    <Func Arg="M, T" Name="BasisOfColumnsCoeff" Label="in the homalg table for Singular"/>
@@ -158,6 +195,43 @@ BasisOfColumnsCoeff :=
     
     homalgSendBlocking( 
       [ "matrix ", N, T, " = BasisOfColumnsCoeff(", M, ")" ],
+      "need_command",
+      "BasisCoeff"
+    );
+    
+    return N;
+    
+  end,
+##  ]]></Listing>
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+
+##  <#GAPDoc Label="NonReducedBasisOfColumnsCoeff:Singular">
+##  <ManSection>
+##    <Func Arg="M, T" Name="NonReducedBasisOfColumnsCoeff" Label="in the homalg table for Singular"/>
+##    <Returns></Returns>
+##    <Description>
+##      This is the entry of the &homalg; table, which calls the corresponding macro <Ref Func="NonReducedBasisOfColumnsCoeff" Label="Singular macro"/> inside the computer algebra system.
+##      <Listing Type="Code"><![CDATA[
+NonReducedBasisOfColumnsCoeff :=
+  function( M, T )
+    local v, N;
+    
+    v := homalgStream( HomalgRing( M ) )!.variable_name;
+    
+    N := HomalgVoidMatrix(
+      NrRows( M ),
+      "unknown_number_of_columns",
+      HomalgRing( M )
+    );
+    
+    homalgSendBlocking( 
+      [
+        "list ", v, "l=NonReducedBasisOfColumnsCoeff(", M, "); ",
+        "matrix ", N, " = ", v, "l[1]; ",
+        "matrix ", T, " = ", v, "l[2]"
+      ],
       "need_command",
       "BasisCoeff"
     );

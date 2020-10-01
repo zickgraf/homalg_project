@@ -21,7 +21,9 @@
 <#Include Label="SyzygiesGeneratorsOfRows:ResidueClassRing">
 <#Include Label="SyzygiesGeneratorsOfColumns:ResidueClassRing">
 <#Include Label="BasisOfRowsCoeff:ResidueClassRing">
+<#Include Label="NonReducedBasisOfRowsCoeff:ResidueClassRing">
 <#Include Label="BasisOfColumnsCoeff:ResidueClassRing">
+<#Include Label="NonReducedBasisOfColumnsCoeff:ResidueClassRing">
 <#Include Label="DecideZeroRowsEffectively:ResidueClassRing">
 <#Include Label="DecideZeroColumnsEffectively:ResidueClassRing">
 <#Include Label="RelativeSyzygiesGeneratorsOfRows:ResidueClassRing">

@@ -79,6 +79,33 @@ BasisOfRowsCoeff :=
     
   end,
 
+NonReducedBasisOfRowsCoeff :=
+  function( M, T )
+    local R, ComputationRing, TT, result;
+
+    Info( InfoLocalizeRingForHomalg, 2, "Start NonReducedBasisOfRowsCoeff with ", NrRows( M ), "x", NrColumns( M ) );
+    
+    R := HomalgRing( M );
+    ComputationRing := AssociatedComputationRing( R );
+    
+    TT := HomalgVoidMatrix( ComputationRing );
+    result := NonReducedBasisOfRowsCoeff( Numerator( M ) , TT );
+    if IsBound(TT!.Denominator) then
+      SetEval( T, [ TT, TT!.Denominator ] );
+      Unbind(TT!.Denominator);
+    else
+      SetEval( T, [ TT, One ( ComputationRing ) ] );
+    fi;
+    result := HomalgLocalRingElement( One( ComputationRing), Denominator( M ), R ) * HomalgLocalMatrix( result, R );
+    
+    Assert( 6, result = T * M );
+
+    Info( InfoLocalizeRingForHomalgShowUnits, 1, "NonReducedBasisOfRowsCoeff: produces denominator: ", Name( Denominator( result ) ), " and for the transformation matrix: ", Name(Denominator(T)) );
+
+    return result;
+    
+  end,
+
 BasisOfColumnsCoeff :=
   function( M, T )
     local R, ComputationRing, TT, result;
@@ -101,6 +128,33 @@ BasisOfColumnsCoeff :=
     Assert( 6, result = M * T );
     
     Info( InfoLocalizeRingForHomalgShowUnits, 1, "BasisOfColumnsCoeff: produces denominator: ", Name( Denominator( result ) ), " and for the transformation matrix: ", Name(Denominator(T)) );
+
+    return result;
+    
+  end,
+
+NonReducedBasisOfColumnsCoeff :=
+  function( M, T )
+    local R, ComputationRing, TT, result;
+
+    Info( InfoLocalizeRingForHomalg, 2, "Start NonReducedBasisOfColumnsCoeff with ", NrRows( M ), "x", NrColumns( M ) );
+    
+    R := HomalgRing( M );
+    ComputationRing := AssociatedComputationRing( R );
+    
+    TT := HomalgVoidMatrix( ComputationRing );
+    result := NonReducedBasisOfColumnsCoeff( Numerator( M ), TT );
+    if IsBound(TT!.Denominator) then
+      SetEval( T, [ TT, TT!.Denominator ] );
+      Unbind(TT!.Denominator);
+    else
+      SetEval( T, [ TT, One ( ComputationRing ) ] );
+    fi;
+    result := HomalgLocalRingElement( One( ComputationRing), Denominator( M ), R ) * HomalgLocalMatrix( result, R );
+    
+    Assert( 6, result = M * T );
+    
+    Info( InfoLocalizeRingForHomalgShowUnits, 1, "NonReducedBasisOfColumnsCoeff: produces denominator: ", Name( Denominator( result ) ), " and for the transformation matrix: ", Name(Denominator(T)) );
 
     return result;
     

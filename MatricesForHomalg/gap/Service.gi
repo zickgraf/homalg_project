@@ -25,7 +25,9 @@ HOMALG_MATRICES.colored_info :=
       BasisOfColumnModule := [ 3, HOMALG_MATRICES.colors.BOB ],
       ## BasisCoeff
       BasisOfRowsCoeff := [ 3, HOMALG_MATRICES.colors.BOB ],
+      NonReducedBasisOfRowsCoeff := [ 3, HOMALG_MATRICES.colors.BOB ],
       BasisOfColumnsCoeff := [ 3, HOMALG_MATRICES.colors.BOB ],
+      NonReducedBasisOfColumnsCoeff := [ 3, HOMALG_MATRICES.colors.BOB ],
       
       ## partially reduced Basis
       PartiallyReducedBasisOfRowModule := [ 3, HOMALG_MATRICES.colors.BOB ],
@@ -2518,6 +2520,125 @@ InstallMethod( BasisOfRowsCoeff, ### defines: BasisOfRowsCoeff (BasisCoeff)
     
 end );
 
+##  <#GAPDoc Label="NonReducedBasisOfRowsCoeff">
+##  <ManSection>
+##    <Oper Arg="M, T" Name="NonReducedBasisOfRowsCoeff" Label="for matrices"/>
+##    <Returns>a &homalg; matrix</Returns>
+##    <Description>
+##      Returns a not necessarily reduced basis <M>B</M> of the rows of <A>M</A> and assigns the <E>void</E> matrix <A>T</A>
+##      (&see; <Ref Func="HomalgVoidMatrix" Label="constructor for void matrices"/>) such that
+##      <M>B = <A>T</A> <A>M</A></M>. (&see; Appendix <Ref Chap="Basic_Operations"/>)
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+InstallMethod( NonReducedBasisOfRowsCoeff,		### defines: NonReducedBasisOfRowsCoeff (BasisCoeff)
+        "for a homalg matrix",
+        [ IsHomalgMatrix, IsHomalgMatrix and IsVoidMatrix ],
+        
+  function( M, T )
+    local R, RP, t, nr, TI, MI, B, TT, nz;
+    
+    if IsBound( M!.NonReducedBasisOfRowsCoeff ) and IsBound( M!.NonReducedBasisOfRows ) then
+        if HasEval( M!.NonReducedBasisOfRowsCoeff ) then
+            SetEval( T, Eval( M!.NonReducedBasisOfRowsCoeff ) );
+        else
+            SetPreEval( T, M!.NonReducedBasisOfRowsCoeff );
+        fi;
+        ResetFilterObj( T, IsVoidMatrix );
+        ## M!.NonReducedBasisOfRows should be bounded as well
+        return M!.NonReducedBasisOfRows;
+    fi;
+    
+    R := HomalgRing( M );
+    
+    RP := homalgTable( R );
+    
+    t := homalgTotalRuntimes( );
+    
+    nr := NrColumns( M );
+    
+    ColoredInfoForService( "busy", "NonReducedBasisOfRowsCoeff", NrRows( M ), " x ", nr, " : ", RingName( R ) );
+    
+    if IsBound(RP!.NonReducedBasisOfRowsCoeff) then
+        
+        B := RP!.NonReducedBasisOfRowsCoeff( M, T ); ResetFilterObj( T, IsVoidMatrix );
+        
+        if HasRowRankOfMatrix( B ) then
+            SetRowRankOfMatrix( M, RowRankOfMatrix( B ) );
+        fi;
+        
+        SetNrColumns( B, nr );
+        
+        nr := NrRows( B );
+        
+        SetNrRows( T, nr );
+        
+        SetIsZero( B, nr = 0 );
+        SetIsZero( M, nr = 0 );
+        SetIsZero( T, nr = 0 );
+        
+        ## check assertion
+        Assert( 6, R!.asserts.NonReducedBasisOfRowsCoeff( B, T, M ) );	## B = T * M;
+        
+        M!.NonReducedBasisOfRows := B;
+        M!.NonReducedBasisOfRowsCoeff := T;
+        
+        ColoredInfoForService( t, "NonReducedBasisOfRowsCoeff", nr );
+        
+        IncreaseRingStatistics( R, "NonReducedBasisOfRowsCoeff" );
+        
+        return B;
+        
+    elif IsBound(RP!.NonReducedBasisOfColumnsCoeff) then
+        
+        TI := HomalgVoidMatrix( R );
+        
+        MI := Involution( M );
+        
+        B := RP!.NonReducedBasisOfColumnsCoeff( MI, TI ); ResetFilterObj( TI, IsVoidMatrix );
+        
+        SetEvalInvolution( T, TI ); ResetFilterObj( T, IsVoidMatrix );
+        
+        if HasColumnRankOfMatrix( B ) then
+            SetRowRankOfMatrix( M, ColumnRankOfMatrix( B ) );
+        fi;
+        
+        SetNrRows( B, nr );
+        
+        MI!.NonReducedBasisOfColumnModule := B;
+        
+        B := Involution( B );
+        
+        nr := NrRows( B );
+        
+        SetNrRows( T, nr ); SetNrColumns( TI, nr );
+        
+        SetIsZero( B, nr = 0 );
+        SetIsZero( M, nr = 0 );
+        SetIsZero( T, nr = 0 );
+        
+        ## check assertion
+        Assert( 6, R!.asserts.NonReducedBasisOfRowsCoeff( B, T, M ) );	## B = T * M;
+        
+        M!.NonReducedBasisOfRows := B;
+        M!.NonReducedBasisOfRowsCoeff := T;
+        
+        ColoredInfoForService( t, "NonReducedBasisOfRowsCoeff", nr );
+        
+        DecreaseRingStatistics( R, "NonReducedBasisOfRowsCoeff" );
+        
+        IncreaseRingStatistics( R, "NonReducedBasisOfColumnsCoeff" );
+        
+        return B;
+        
+    fi;
+    
+    # fallback
+    return BasisOfRowsCoeff( M, T );
+    
+end );
+
 ##  <#GAPDoc Label="BasisOfColumnsCoeff">
 ##  <ManSection>
 ##    <Oper Arg="M, T" Name="BasisOfColumnsCoeff" Label="for matrices"/>
@@ -2723,6 +2844,125 @@ InstallMethod( BasisOfColumnsCoeff, ### defines: BasisOfColumnsCoeff (BasisCoeff
     
 end );
 
+##  <#GAPDoc Label="NonReducedBasisOfColumnsCoeff">
+##  <ManSection>
+##    <Oper Arg="M, T" Name="NonReducedBasisOfColumnsCoeff" Label="for matrices"/>
+##    <Returns>a &homalg; matrix</Returns>
+##    <Description>
+##      Returns a not necessarily reduced basis <M>B</M> of the columns of <A>M</A> and assigns the <E>void</E> matrix <A>T</A>
+##      (&see; <Ref Func="HomalgVoidMatrix" Label="constructor for void matrices"/>) such that
+##      <M>B = <A>M</A> <A>T</A></M>. (&see; Appendix <Ref Chap="Basic_Operations"/>)
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+##
+InstallMethod( NonReducedBasisOfColumnsCoeff,		### defines: NonReducedBasisOfColumnsCoeff (BasisCoeff)
+        "for a homalg matrix",
+        [ IsHomalgMatrix, IsHomalgMatrix and IsVoidMatrix ],
+        
+  function( M, T )
+    local R, RP, t, nr, TI, MI, B, TT, nz;
+    
+    if IsBound( M!.NonReducedBasisOfColumnsCoeff ) and IsBound( M!.NonReducedBasisOfColumns ) then
+        if HasEval( M!.NonReducedBasisOfColumnsCoeff ) then
+            SetEval( T, Eval( M!.NonReducedBasisOfColumnsCoeff ) );
+        else
+            SetPreEval( T, M!.NonReducedBasisOfColumnsCoeff );
+        fi;
+        ResetFilterObj( T, IsVoidMatrix );
+        ## M!.NonReducedBasisOfColumns should be bounded as well
+        return M!.NonReducedBasisOfColumns;
+    fi;
+    
+    R := HomalgRing( M );
+    
+    RP := homalgTable( R );
+    
+    t := homalgTotalRuntimes( );
+    
+    nr := NrRows( M );
+    
+    ColoredInfoForService( "busy", "NonReducedBasisOfColumnsCoeff", nr, " x ", NrColumns( M ), " : ", RingName( R ) );
+    
+    if IsBound(RP!.NonReducedBasisOfColumnsCoeff) then
+        
+        B := RP!.NonReducedBasisOfColumnsCoeff( M, T ); ResetFilterObj( T, IsVoidMatrix );
+        
+        if HasColumnRankOfMatrix( B ) then
+            SetColumnRankOfMatrix( M, ColumnRankOfMatrix( B ) );
+        fi;
+        
+        SetNrRows( B, nr );
+        
+        nr := NrColumns( B );
+        
+        SetNrColumns( T, nr );
+        
+        SetIsZero( B, nr = 0 );
+        SetIsZero( M, nr = 0 );
+        SetIsZero( T, nr = 0 );
+        
+        ## check assertion
+        Assert( 6, R!.asserts.NonReducedBasisOfColumnsCoeff( B, M, T ) );	# B = M * T
+        
+        M!.NonReducedBasisOfColumns := B;
+        M!.NonReducedBasisOfColumnsCoeff := T;
+        
+        ColoredInfoForService( t, "NonReducedBasisOfColumnsCoeff", nr );
+        
+        IncreaseRingStatistics( R, "NonReducedBasisOfColumnsCoeff" );
+        
+        return B;
+        
+    elif IsBound(RP!.NonReducedBasisOfRowsCoeff) then
+        
+        TI := HomalgVoidMatrix( R );
+        
+        MI := Involution( M );
+        
+        B := RP!.NonReducedBasisOfRowsCoeff( MI, TI ); ResetFilterObj( TI, IsVoidMatrix );
+        
+        SetEvalInvolution( T, TI ); ResetFilterObj( T, IsVoidMatrix );
+        
+        if HasRowRankOfMatrix( B ) then
+            SetColumnRankOfMatrix( M, RowRankOfMatrix( B ) );
+        fi;
+        
+        SetNrColumns( B, nr );
+        
+        MI!.NonReducedBasisOfRowModule := B;
+        
+        B := Involution( B );
+        
+        nr := NrColumns( B );
+        
+        SetNrColumns( T, nr ); SetNrRows( TI, nr );
+        
+        SetIsZero( B, nr = 0 );
+        SetIsZero( M, nr = 0 );
+        SetIsZero( T, nr = 0 );
+        
+        ## check assertion
+        Assert( 6, R!.asserts.NonReducedBasisOfColumnsCoeff( B, M, T ) );	# B = M * T
+        
+        M!.NonReducedBasisOfColumns := B;
+        M!.NonReducedBasisOfColumnsCoeff := T;
+        
+        ColoredInfoForService( t, "NonReducedBasisOfColumnsCoeff", nr );
+        
+        DecreaseRingStatistics( R, "NonReducedBasisOfColumnsCoeff" );
+        
+        IncreaseRingStatistics( R, "NonReducedBasisOfRowsCoeff" );
+        
+        return B;
+        
+    fi;
+    
+    # fallback
+    return BasisOfColumns( M, T );
+    
+end );
+
 ##  <#GAPDoc Label="DecideZeroRowsEffectively">
 ##  <ManSection>
 ##    <Oper Arg="A, B, T" Name="DecideZeroRowsEffectively" Label="for pairs of matrices"/>
@@ -2793,7 +3033,7 @@ InstallMethod( DecideZeroRowsEffectively, ### defines: DecideZeroRowsEffectively
     
     C := HomalgVoidMatrix( R );
     
-    CB := BasisOfRowsCoeff( B, C );
+    CB := NonReducedBasisOfRowsCoeff( B, C );
     
     ## knowing this will avoid computations
     IsOne( CB );
@@ -2998,7 +3238,7 @@ InstallMethod( DecideZeroColumnsEffectively, ### defines: DecideZeroColumnsEffec
     
     C := HomalgVoidMatrix( R );
     
-    BC := BasisOfColumnsCoeff( B, C );
+    BC := NonReducedBasisOfColumnsCoeff( B, C );
     
     ## knowing this will avoid computations
     IsOne( BC );

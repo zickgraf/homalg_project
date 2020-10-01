@@ -551,6 +551,24 @@ InstallMethod( BasisOfRowsCoeff,
 end );
 
 ##
+InstallMethod( NonReducedBasisOfRowsCoeff,
+        "LIMAT: for homalg matrices (IsEmptyMatrix)",
+        [ IsHomalgMatrix and IsEmptyMatrix, IsHomalgMatrix and IsVoidMatrix ],
+        
+  function( M, T )
+    local R;
+    
+    R := HomalgRing( M );
+    
+    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "NonReducedBasisOfRowsCoeff( IsZero(Matrix), T )", "\033[0m" );
+    
+    SetPreEval( T, HomalgZeroMatrix( 0, NrRows( M ), R ) ); ResetFilterObj( T, IsVoidMatrix );
+    
+    return HomalgZeroMatrix( 0, NrColumns( M ), R );
+    
+end );
+
+##
 InstallMethod( BasisOfColumnsCoeff,
         "LIMAT: for homalg matrices (IsEmptyMatrix)",
         [ IsHomalgMatrix and IsEmptyMatrix, IsHomalgMatrix and IsVoidMatrix ],
@@ -565,6 +583,24 @@ InstallMethod( BasisOfColumnsCoeff,
     SetPreEval( T, HomalgZeroMatrix( NumberColumns( M ), 0, R ) ); ResetFilterObj( T, IsVoidMatrix );
     
     return HomalgZeroMatrix( NumberRows( M ), 0, R );
+    
+end );
+
+##
+InstallMethod( NonReducedBasisOfColumnsCoeff,
+        "LIMAT: for homalg matrices (IsEmptyMatrix)",
+        [ IsHomalgMatrix and IsEmptyMatrix, IsHomalgMatrix and IsVoidMatrix ],
+        
+  function( M, T )
+    local R;
+    
+    R := HomalgRing( M );
+    
+    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "NonReducedBasisOfColumnsCoeff( IsZero(Matrix), T )", "\033[0m" );
+    
+    SetPreEval( T, HomalgZeroMatrix( NrColumns( M ), 0, R ) ); ResetFilterObj( T, IsVoidMatrix );
+    
+    return HomalgZeroMatrix( NrRows( M ), 0, R );
     
 end );
 

@@ -36,10 +36,24 @@ BasisOfRowsCoeff :=
     
   end,
 
+NonReducedBasisOfRowsCoeff :=
+  function( M, T )
+
+    Error( "NonReducedBasisOfRowsCoeff is not supported over fake local rings\n" );    
+    
+  end,
+
 BasisOfColumnsCoeff :=
   function( M, T )
       
       Error( "BasisOfColumnsCoeff is not supported over fake local rings\n" );    
+
+  end,
+
+NonReducedBasisOfColumnsCoeff :=
+  function( M, T )
+      
+      Error( "NonReducedBasisOfColumnsCoeff is not supported over fake local rings\n" );    
 
   end,
 

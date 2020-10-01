@@ -235,10 +235,31 @@ proc BasisOfRowsCoeffMora (matrix M)\n\
   return(l)\n\
 }\n\n",
     
+    NonReducedBasisOfRowsCoeffMora := "\n\
+proc NonReducedBasisOfRowsCoeffMora (matrix M)\n\
+{\n\
+  matrix B = NonReducedBasisOfRowModule(M);\n\
+  matrix U;\n\
+  matrix T = lift(M,B,U); //never use stdlift, also because it might differ from std!!!\n\
+  list l = CreateInputForLocalMatrixRows(T,U);\n\
+  l = B,l[1],l[2];\n\
+  return(l)\n\
+}\n\n",
+    
     BasisOfColumnsCoeffMora := "\n\
 proc BasisOfColumnsCoeffMora (matrix M)\n\
 {\n\
   list l = BasisOfRowsCoeffMora(Involution(M));\n\
+  matrix B = l[1];\n\
+  matrix T = l[2];\n\
+  l = Involution(B),Involution(T),l[3];\n\
+  return(l);\n\
+}\n\n",
+    
+    NonReducedBasisOfColumnsCoeffMora := "\n\
+proc NonReducedBasisOfColumnsCoeffMora (matrix M)\n\
+{\n\
+  list l = NonReducedBasisOfRowsCoeffMora(Involution(M));\n\
   matrix B = l[1];\n\
   matrix T = l[2];\n\
   l = Involution(B),Involution(T),l[3];\n\
@@ -439,6 +460,22 @@ InstallValue( CommonHomalgTableForSingularBasicMoraPreRing,
                    
                  end,
                
+               NonReducedBasisOfRowsCoeff :=
+                 function( M, T )
+                   local R, N;
+                   
+                   R := HomalgRing( M );
+                   
+                   N := HomalgVoidMatrix( "unknown_number_of_rows", NrColumns( M ), R );
+                   
+                   homalgSendBlocking( [ "list l=NonReducedBasisOfRowsCoeffMora(", M, "); matrix ", N, " = l[1]; matrix ", T, " = l[2]" ], "need_command", HOMALG_IO.Pictograms.BasisCoeff );
+                   
+                   T!.Denominator := HomalgRingElement( homalgSendBlocking( [ "l[3]" ], [ "poly" ], R, HOMALG_IO.Pictograms.BasisCoeff ), R );
+                   
+                   return N;
+                   
+                 end,
+               
                BasisOfColumnsCoeff :=
                  function( M, T )
                    local R, N;
@@ -448,6 +485,22 @@ InstallValue( CommonHomalgTableForSingularBasicMoraPreRing,
                    N := HomalgVoidMatrix( NumberRows( M ), "unknown_number_of_columns", R );
                    
                    homalgSendBlocking( [ "list l=BasisOfColumnsCoeffMora(", M, "); matrix ", N, " = l[1]; matrix ", T, " = l[2]" ], "need_command", HOMALG_IO.Pictograms.BasisCoeff );
+                   
+                   T!.Denominator := HomalgRingElement( homalgSendBlocking( [ "l[3]" ], [ "poly" ], R, HOMALG_IO.Pictograms.BasisCoeff ), R );
+                   
+                   return N;
+                   
+                 end,
+               
+               NonReducedBasisOfColumnsCoeff :=
+                 function( M, T )
+                   local R, N;
+                   
+                   R := HomalgRing( M );
+                   
+                   N := HomalgVoidMatrix( NrRows( M ), "unknown_number_of_columns", R );
+                   
+                   homalgSendBlocking( [ "list l=NonReducedBasisOfColumnsCoeffMora(", M, "); matrix ", N, " = l[1]; matrix ", T, " = l[2]" ], "need_command", HOMALG_IO.Pictograms.BasisCoeff );
                    
                    T!.Denominator := HomalgRingElement( homalgSendBlocking( [ "l[3]" ], [ "poly" ], R, HOMALG_IO.Pictograms.BasisCoeff ), R );
                    
