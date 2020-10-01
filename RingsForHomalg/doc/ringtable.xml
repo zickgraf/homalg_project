@@ -33,8 +33,12 @@ This is the chapter of the documentation describing the installation.
     <#Include Label="SyzygiesGeneratorsOfColumns:SingularMacro">
     <#Include Label="BasisOfRowsCoeff:Singular">
     <#Include Label="BasisOfRowsCoeff:SingularMacro">
+    <#Include Label="NonReducedBasisOfRowsCoeff:Singular">
+    <#Include Label="NonReducedBasisOfRowsCoeff:SingularMacro">
     <#Include Label="BasisOfColumnsCoeff:Singular">
     <#Include Label="BasisOfColumnsCoeff:SingularMacro">
+    <#Include Label="NonReducedBasisOfColumnsCoeff:Singular">
+    <#Include Label="NonReducedBasisOfColumnsCoeff:SingularMacro">
     <#Include Label="DecideZeroRowsEffectively:Singular">
     <#Include Label="DecideZeroRowsEffectively:SingularMacro">
     <#Include Label="DecideZeroColumnsEffectively:Singular">

@@ -88,7 +88,13 @@ DeclareOperation( "SyzygiesGeneratorsOfColumns",
 DeclareOperation( "BasisOfRowsCoeff",
         [ IsHomalgMatrix, IsHomalgMatrix ] );
 
+DeclareOperation( "NonReducedBasisOfRowsCoeff",
+        [ IsHomalgMatrix, IsHomalgMatrix ] );
+
 DeclareOperation( "BasisOfColumnsCoeff",
+        [ IsHomalgMatrix, IsHomalgMatrix ] );
+
+DeclareOperation( "NonReducedBasisOfColumnsCoeff",
         [ IsHomalgMatrix, IsHomalgMatrix ] );
 
 DeclareOperation( "DecideZeroRowsEffectively",

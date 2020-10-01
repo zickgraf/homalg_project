@@ -1835,7 +1835,9 @@ InstallGlobalFunction( CreateHomalgRing,
                       BasisOfRowModule := 0,
                       BasisOfColumnModule := 0,
                       BasisOfRowsCoeff := 0,
+                      NonReducedBasisOfRowsCoeff := 0,
                       BasisOfColumnsCoeff := 0,
+                      NonReducedBasisOfColumnsCoeff := 0,
                       DecideZeroRows := 0,
                       DecideZeroColumns := 0,
                       DecideZeroRowsEffectively := 0,
@@ -1869,7 +1871,13 @@ InstallGlobalFunction( CreateHomalgRing,
           BasisOfRowsCoeff :=
             function( B, T, M ) return B = T * M; end,
           
+          NonReducedBasisOfRowsCoeff :=
+            function( B, T, M ) return B = T * M; end,
+          
           BasisOfColumnsCoeff :=
+            function( B, M, T ) return B = M * T; end,
+          
+          NonReducedBasisOfColumnsCoeff :=
             function( B, M, T ) return B = M * T; end,
           
           DecideZeroRows_Effectively :=

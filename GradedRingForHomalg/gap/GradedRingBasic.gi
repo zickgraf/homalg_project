@@ -52,6 +52,22 @@ InstallValue( CommonHomalgTableForGradedRingsBasic,
                 
               end,
             
+            NonReducedBasisOfRowsCoeff :=
+              function( M, T )
+                local S, TT, result;
+                
+                S := HomalgRing( M );
+                
+                TT := HomalgVoidMatrix( UnderlyingNonGradedRing( S ) );
+                
+                result := NonReducedBasisOfRowsCoeff( UnderlyingMatrixOverNonGradedRing( M ), TT );
+                
+                SetEval( T, TT );
+                
+                return MatrixOverGradedRing( result, S );
+                
+              end,
+            
             BasisOfColumnsCoeff :=
               function( M, T )
                 local S, TT, result;
@@ -61,6 +77,22 @@ InstallValue( CommonHomalgTableForGradedRingsBasic,
                 TT := HomalgVoidMatrix( UnderlyingNonGradedRing( S ) );
                 
                 result := BasisOfColumnsCoeff( UnderlyingMatrixOverNonGradedRing( M ), TT );
+                
+                SetEval( T, TT );
+                
+                return MatrixOverGradedRing( result, S );
+                
+              end,
+            
+            NonReducedBasisOfColumnsCoeff :=
+              function( M, T )
+                local S, TT, result;
+                
+                S := HomalgRing( M );
+                
+                TT := HomalgVoidMatrix( UnderlyingNonGradedRing( S ) );
+                
+                result := NonReducedBasisOfColumnsCoeff( UnderlyingMatrixOverNonGradedRing( M ), TT );
                 
                 SetEval( T, TT );
                 

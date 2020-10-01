@@ -155,7 +155,9 @@
 <#Include Label="ReducedSyzygiesGeneratorsOfColumns">
 
 <#Include Label="BasisOfRowsCoeff">
+<#Include Label="NonReducedBasisOfRowsCoeff">
 <#Include Label="BasisOfColumnsCoeff">
+<#Include Label="NonReducedBasisOfColumnsCoeff">
 <#Include Label="DecideZeroRowsEffectively">
 <#Include Label="DecideZeroColumnsEffectively">
 

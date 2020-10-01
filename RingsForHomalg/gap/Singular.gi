@@ -585,6 +585,28 @@ proc BasisOfRowModule (matrix M)\n\
 ##  </ManSection>
 ##  <#/GAPDoc>
     
+##  <#GAPDoc Label="NonReducedBasisOfRowModule:SingularMacro">
+##  <ManSection>
+##    <Func Arg="M" Name="NonReducedBasisOfRowModule" Label="Singular macro"/>
+##    <Returns></Returns>
+##    <Description>
+##    
+##      <Listing Type="Code"><![CDATA[
+    NonReducedBasisOfRowModule := """
+proc NonReducedBasisOfRowModule (matrix M)
+{
+  option(noredSB);
+  matrix result = std(M);
+  option(redSB);
+  return(result);
+}
+
+ """,
+##  ]]></Listing>
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+    
 ##  <#GAPDoc Label="BasisOfColumnModule:SingularMacro">
 ##  <ManSection>
 ##    <Func Arg="M" Name="BasisOfColumnModule" Label="Singular macro"/>
@@ -596,6 +618,23 @@ proc BasisOfRowModule (matrix M)\n\
 proc BasisOfColumnModule (matrix M)\n\
 {\n\
   return(Involution(BasisOfRowModule(Involution(M))));\n\
+}\n\n",
+##  ]]></Listing>
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+    
+##  <#GAPDoc Label="NonReducedBasisOfColumnModule:SingularMacro">
+##  <ManSection>
+##    <Func Arg="M" Name="NonReducedBasisOfColumnModule" Label="Singular macro"/>
+##    <Returns></Returns>
+##    <Description>
+##    
+##      <Listing Type="Code"><![CDATA[
+    NonReducedBasisOfColumnModule := "\n\
+proc NonReducedBasisOfColumnModule (matrix M)\n\
+{\n\
+  return(Involution(NonReducedBasisOfRowModule(Involution(M))));\n\
 }\n\n",
 ##  ]]></Listing>
 ##    </Description>
@@ -649,6 +688,26 @@ proc BasisOfRowsCoeff (matrix M)
 ##  </ManSection>
 ##  <#/GAPDoc>
 
+##  <#GAPDoc Label="NonReducedBasisOfRowsCoeff:SingularMacro">
+##  <ManSection>
+##    <Func Arg="M, T" Name="NonReducedBasisOfRowsCoeff" Label="Singular macro"/>
+##    <Returns></Returns>
+##    <Description>
+##    
+##      <Listing Type="Code"><![CDATA[
+    NonReducedBasisOfRowsCoeff := "\n\
+proc NonReducedBasisOfRowsCoeff (matrix M)\n\
+{\n\
+  matrix B = NonReducedBasisOfRowModule(M);\n\
+  matrix T = lift(M,B);\n\
+  list l = B,T;\n\
+  return(l)\n\
+}\n\n",
+##  ]]></Listing>
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+
 ##  <#GAPDoc Label="BasisOfColumnsCoeff:SingularMacro">
 ##  <ManSection>
 ##    <Func Arg="M, T" Name="BasisOfColumnsCoeff" Label="Singular macro"/>
@@ -664,6 +723,27 @@ proc BasisOfColumnsCoeff (matrix M)
 }
 
  """,
+##  ]]></Listing>
+##    </Description>
+##  </ManSection>
+##  <#/GAPDoc>
+    
+##  <#GAPDoc Label="NonReducedBasisOfColumnsCoeff:SingularMacro">
+##  <ManSection>
+##    <Func Arg="M, T" Name="NonReducedBasisOfColumnsCoeff" Label="Singular macro"/>
+##    <Returns></Returns>
+##    <Description>
+##    
+##      <Listing Type="Code"><![CDATA[
+    NonReducedBasisOfColumnsCoeff := "\n\
+proc NonReducedBasisOfColumnsCoeff (matrix M)\n\
+{\n\
+  list l = NonReducedBasisOfRowsCoeff(Involution(M));\n\
+  matrix B = l[1];\n\
+  matrix T = l[2];\n\
+  l = Involution(B),Involution(T);\n\
+  return(l);\n\
+}\n\n",
 ##  ]]></Listing>
 ##    </Description>
 ##  </ManSection>

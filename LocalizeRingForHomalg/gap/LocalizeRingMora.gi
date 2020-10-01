@@ -54,7 +54,9 @@ InstallMethod( LocalizePolynomialRingAtZeroWithMora,
     RP := CreateHomalgTableForLocalizedRingsWithMora( R );
     Rloc := _LocalizePolynomialRingAtZeroWithMora( R );
     Rloc!.asserts.BasisOfRowsCoeff := function( arg ) return true; end;
+    Rloc!.asserts.NonReducedBasisOfRowsCoeff := function( arg ) return true; end;
     Rloc!.asserts.BasisOfColumnsCoeff := function( arg ) return true; end;
+    Rloc!.asserts.NonReducedBasisOfColumnsCoeff := function( arg ) return true; end;
     Rloc!.asserts.DecideZeroRowsEffectively := function( arg ) return true; end;
     Rloc!.asserts.DecideZeroColumnsEffectively := function( arg ) return true; end;
     var := IndeterminatesOfPolynomialRing( R );

@@ -98,6 +98,40 @@ InstallValue( CommonHomalgTableForResidueClassRingsBasic,
                ##  </ManSection>
                ##  <#/GAPDoc>
                
+               ##  <#GAPDoc Label="NonReducedBasisOfRowsCoeff:ResidueClassRing">
+               ##  <ManSection>
+               ##    <Func Arg="M, T" Name="NonReducedBasisOfRowsCoeff" Label="ResidueClassRing"/>
+               ##    <Returns>a &homalg; matrix over the ambient ring</Returns>
+               ##    <Description>
+               ##    <Listing Type="Code"><![CDATA[
+               NonReducedBasisOfRowsCoeff :=
+                 function( M, T )
+                   local Mrel, TT, bas, nz;
+                   
+                   Mrel := StackedRelations( M );
+                   
+                   TT := HomalgVoidMatrix( HomalgRing( Mrel ) );
+                   
+                   bas := NonReducedBasisOfRowsCoeff( Mrel, TT );
+                   
+                   bas := HomalgResidueClassMatrix( bas, HomalgRing( M ) );
+                   
+                   nz := NonZeroRows( bas );
+                   
+                   SetEval( T, CertainRows( CertainColumns( TT, [ 1 .. NrRows( M ) ] ), nz ) );
+                   
+                   ResetFilterObj( T, IsVoidMatrix );
+                   
+                   ## the generic NonReducedBasisOfRowsCoeff will assume that
+                   ## ( NrRows( B ) = 0 ) = IsZero( B )
+                   return CertainRows( bas, nz );
+                   
+                 end,
+               ##  ]]></Listing>
+               ##    </Description>
+               ##  </ManSection>
+               ##  <#/GAPDoc>
+               
                ##  <#GAPDoc Label="BasisOfColumnsCoeff:ResidueClassRing">
                ##  <ManSection>
                ##    <Func Arg="M, T" Name="BasisOfColumnsCoeff" Label="ResidueClassRing"/>
@@ -124,6 +158,40 @@ InstallValue( CommonHomalgTableForResidueClassRingsBasic,
                    
                    ## the generic BasisOfColumnsCoeff will assume that
                    ## ( NumberColumns( B ) = 0 ) = IsZero( B )
+                   return CertainColumns( bas, nz );
+                   
+                 end,
+               ##  ]]></Listing>
+               ##    </Description>
+               ##  </ManSection>
+               ##  <#/GAPDoc>
+               
+               ##  <#GAPDoc Label="NonReducedBasisOfColumnsCoeff:ResidueClassRing">
+               ##  <ManSection>
+               ##    <Func Arg="M, T" Name="NonReducedBasisOfColumnsCoeff" Label="ResidueClassRing"/>
+               ##    <Returns>a &homalg; matrix over the ambient ring</Returns>
+               ##    <Description>
+               ##    <Listing Type="Code"><![CDATA[
+               NonReducedBasisOfColumnsCoeff :=
+                 function( M, T )
+                   local Mrel, TT, bas, nz;
+                   
+                   Mrel := AugmentedRelations( M );
+                   
+                   TT := HomalgVoidMatrix( HomalgRing( Mrel ) );
+                   
+                   bas := NonReducedBasisOfColumnsCoeff( Mrel, TT );
+                   
+                   bas := HomalgResidueClassMatrix( bas, HomalgRing( M ) );
+                   
+                   nz := NonZeroColumns( bas );
+                   
+                   SetEval( T, CertainColumns( CertainRows( TT, [ 1 .. NrColumns( M ) ] ), nz ) );
+                   
+                   ResetFilterObj( T, IsVoidMatrix );
+                   
+                   ## the generic NonReducedBasisOfColumnsCoeff will assume that
+                   ## ( NrColumns( B ) = 0 ) = IsZero( B )
                    return CertainColumns( bas, nz );
                    
                  end,
