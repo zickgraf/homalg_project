@@ -58,6 +58,20 @@ InstallValue( CommonHomalgTableForGAPHomalgBasic,
                    
                  end,
                
+               NonReducedBasisOfRowsCoeff :=
+                 function( M, T )
+                   local R, N;
+                   
+                   R := HomalgRing( M );
+                   
+                   N := HomalgVoidMatrix( "unknown_number_of_rows", NrColumns( M ), R );
+                   
+                   homalgSendBlocking( [ T, " := HomalgVoidMatrix(", R, ");; ", N, " := NonReducedBasisOfRowsCoeff(", M, T, ")" ], "need_command", "BasisCoeff" );
+                   
+                   return N;
+                   
+                 end,
+               
                BasisOfColumnsCoeff :=
                  function( M, T )
                    local R, N;
@@ -67,6 +81,20 @@ InstallValue( CommonHomalgTableForGAPHomalgBasic,
                    N := HomalgVoidMatrix( NrRows( M ), "unknown_number_of_columns", R );
                    
                    homalgSendBlocking( [ T, " := HomalgVoidMatrix(", R, ");; ", N, " := BasisOfColumnsCoeff(", M, T, ")" ], "need_command", "BasisCoeff" );
+                   
+                   return N;
+                   
+                 end,
+               
+               NonReducedBasisOfColumnsCoeff :=
+                 function( M, T )
+                   local R, N;
+                   
+                   R := HomalgRing( M );
+                   
+                   N := HomalgVoidMatrix( NrRows( M ), "unknown_number_of_columns", R );
+                   
+                   homalgSendBlocking( [ T, " := HomalgVoidMatrix(", R, ");; ", N, " := NonReducedBasisOfColumnsCoeff(", M, T, ")" ], "need_command", "BasisCoeff" );
                    
                    return N;
                    

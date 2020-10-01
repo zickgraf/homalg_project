@@ -43,7 +43,9 @@ linear systems <M>XA=B</M> resp. <M>AX=B</M>.
 
 <List>
   <Item><Ref Oper="BasisOfRowsCoeff" Label="for matrices"/></Item>
+  <Item><Ref Oper="NonReducedBasisOfRowsCoeff" Label="for matrices"/></Item>
   <Item><Ref Oper="BasisOfColumnsCoeff" Label="for matrices"/></Item>
+  <Item><Ref Oper="NonReducedBasisOfColumnsCoeff" Label="for matrices"/></Item>
 </List>
 
 <List>
