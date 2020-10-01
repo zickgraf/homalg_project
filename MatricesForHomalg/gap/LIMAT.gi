@@ -1361,17 +1361,17 @@ InstallMethod( KroneckerMat,
 end );
 
 ##
-InstallMethod( KroneckerMat,
-        "LIMAT: for homalg matrices (IsOne)",
-        [ IsHomalgMatrix and IsOne, IsHomalgMatrix ],
-        
-  function( A, B )
-    
-    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "KroneckerMat( IsOne(Matrix), IsHomalgMatrix )", "\033[0m" );
-    
-    return DiagMat( HomalgRing( A ), ListWithIdenticalEntries( NumberRows( A ), B ) );
-    
-end );
+#InstallMethod( KroneckerMat,
+#        "LIMAT: for homalg matrices (IsOne)",
+#        [ IsHomalgMatrix and IsOne, IsHomalgMatrix ],
+#        
+#  function( A, B )
+#    
+#    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "KroneckerMat( IsOne(Matrix), IsHomalgMatrix )", "\033[0m" );
+#    
+#    return DiagMat( HomalgRing( A ), ListWithIdenticalEntries( NumberRows( A ), B ) );
+#    
+#end );
 
 ##
 InstallMethod( KroneckerMat,
@@ -1390,27 +1390,27 @@ InstallMethod( KroneckerMat,
 end );
 
 ##
-InstallMethod( KroneckerMat,
-        "LIMAT: for homalg matrices (IsOne)",
-        [ IsHomalgMatrix, IsHomalgMatrix and IsOne ],
-        
-  function( A, B )
-    local R;
-    
-    R := HomalgRing( A );
-    
-    if ( HasNumberRows( B ) and NumberRows( B ) = 1 )
-       or ( HasNumberColumns( B ) and NumberColumns( B ) = 1 ) then
-        
-        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "KroneckerMat( IsHomalgMatrix, (1) )", "\033[0m" );
-        
-        return A;
-        
-    fi;
-    
-    TryNextMethod( );
-    
-end );
+#InstallMethod( KroneckerMat,
+#        "LIMAT: for homalg matrices (IsOne)",
+#        [ IsHomalgMatrix, IsHomalgMatrix and IsOne ],
+#        
+#  function( A, B )
+#    local R;
+#    
+#    R := HomalgRing( A );
+#    
+#    if ( HasNumberRows( B ) and NumberRows( B ) = 1 )
+#       or ( HasNumberColumns( B ) and NumberColumns( B ) = 1 ) then
+#        
+#        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "KroneckerMat( IsHomalgMatrix, (1) )", "\033[0m" );
+#        
+#        return A;
+#        
+#    fi;
+#    
+#    TryNextMethod( );
+#    
+#end );
 
 ##
 InstallMethod( KroneckerMat,
@@ -1593,6 +1593,31 @@ InstallMethod( \*,
     
     if R <> fail and not IsIdenticalObj( R, HomalgRing( A ) ) then
         Error( "the ring element and the matrix are not defined over identically the same ring\n" );
+    fi;
+    
+    TryNextMethod( );
+    
+end );
+
+##
+InstallMethod( \*,
+        "LIMAT: TODO",
+        [ IsHomalgMatrix and HasEvalKroneckerMat, IsHomalgMatrix and HasEvalKroneckerMat ], 100000,
+        
+  function( A, B )
+    local A1, A2, B1, B2;
+    
+    A1 := EvalKroneckerMat( A )[1];
+    A2 := EvalKroneckerMat( A )[2];
+    B1 := EvalKroneckerMat( B )[1];
+    B2 := EvalKroneckerMat( B )[2];
+    
+    if NrColumns( A1 ) = NrRows( B1 ) and NrColumns( A2 ) = NrRows( B2 ) then
+
+        Error( "Kronecker optimization" );
+        
+        return KroneckerMat( A1 * B1, A2 * B2 );
+        
     fi;
     
     TryNextMethod( );
@@ -3566,15 +3591,29 @@ InstallMethod( SyzygiesOfRows,
         [ IsHomalgMatrix and HasEvalKroneckerMat ],
         
   function( M )
-    
-    Error( "SyzygiesOfRows" );
-    
-    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfRows(KroneckerMat(Matrix))", "\033[0m" );
+    local A, B;
     
     A := EvalKroneckerMat( M )[1];
     B := EvalKroneckerMat( M )[2];
     
-    return UnionOfRows( SyzygiesOfRows( A ), SyzygiesOfRows( B ) );
+    # SyzygiesOfRows will trigger an evaluation anyway, so we can can ask IsOne without asking HasIsOne
+    if IsOne( A ) then
+        
+        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfRows(KroneckerMat(IsOne(Matrix), IsHomalgMatrix))", "\033[0m" );
+        Error( "unused" );
+        
+        return KroneckerMat( A, SyzygiesOfRows( B ) );
+        
+    elif IsOne( B ) then
+        
+        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfRows(KroneckerMat(IsHomalgMatrix, IsOne(Matrix)))", "\033[0m" );
+        Error( "unused" );
+        
+        return KroneckerMat( SyzygiesOfRows( A ), B );
+        
+    fi;
+    
+    TryNextMethod( );
     
 end );
 
@@ -3601,15 +3640,34 @@ InstallMethod( SyzygiesOfColumns,
         [ IsHomalgMatrix and HasEvalKroneckerMat ],
         
   function( M )
-
-    Error( "SyzygiesOfColumns" );
-    
-    Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfColumns(KroneckerMat(Matrix))", "\033[0m" );
+    local A, B, result1, result2;
     
     A := EvalKroneckerMat( M )[1];
     B := EvalKroneckerMat( M )[2];
     
-    return UnionOfColumns( SyzygiesOfColumns( A ), SyzygiesOfColumns( B ) );
+    # SyzygiesOfColumns will trigger an evaluation anyway, so we can can ask IsOne without asking HasIsOne
+    if IsOne( A ) then
+        
+        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfColumns(KroneckerMat(IsOne(Matrix), IsHomalgMatrix))", "\033[0m" );
+        
+        #result1 := BasisOfColumns( SyzygiesGeneratorsOfColumns( M ) );
+        result2 := BasisOfColumns( KroneckerMat( A, SyzygiesOfColumns( B ) ) );
+        
+        #Assert( 0, result1 = result2 );
+        
+        return result2;
+        
+    elif IsOne( B ) then
+        
+        Info( InfoLIMAT, 2, LIMAT.color, "\033[01mLIMAT\033[0m ", LIMAT.color, "SyzygiesOfColumns(KroneckerMat(IsHomalgMatrix, IsOne(Matrix)))", "\033[0m" );
+        
+        Error( "unused" );
+        
+        return KroneckerMat( SyzygiesOfColumns( A ), B );
+        
+    fi;
+    
+    TryNextMethod( );
     
 end );
 
