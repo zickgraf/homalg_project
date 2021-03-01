@@ -667,18 +667,41 @@ proc RelativeBasisOfRowsCoeff (matrix M,int limit)
   if (use_liftstd) {
     matrix T1;
     module B1 = liftstd(module(M),T1,"std",limit);
-    // make sure we get the same output as when applying std
-    module B2 = std(B1);
-    matrix T2 = lift(B1,B2);
     
+    matrix T = T1;
+    matrix B = matrix(B1);
+    
+    // make sure we get the same output as when applying liftstd with limit=0
+    
+    // via division by the content
+    //number c;
+    //module T1mod = module(T1);
+    //module B2;
+    //attrib(B2, "rank", attrib(B1, "rank"));
+    //module T2mod;
+    //attrib(T2mod, "rank", attrib(T1mod, "rank"));
+    //for (int j=1;j<=size(B1);j++) {
+    //  c = content(B1[j]);
+    //  B2[j] = B1[j]/c;
+    //  T2mod[j] = T1mod[j]/c;
+    //}
+    //matrix B = matrix(B2);
+    //matrix T = matrix(T2mod);
+
+    
+    // alternative: via additional lift
+    //module B3 = std(B1);
+    //matrix T2 = lift(B1,B2);
+    //matrix B = matrix(B1);
+    //matrix T = T1;
     // TODO: test this
-    matrix B = matrix(B2);
-    if (hasCommutativeVars(basering)) {
-      matrix T = T1 * T2;
-    }
-    else {
-      matrix T = transpose(transpose(T2) * transpose(T1));
-    }
+    //matrix B = matrix(B2);
+    //if (hasCommutativeVars(basering)) {
+    //  matrix T = T1 * T2;
+    //}
+    //else {
+    //  matrix T = transpose(transpose(T2) * transpose(T1));
+    //}
   }
   else {
     matrix B = BasisOfRowModule(M);
