@@ -2324,7 +2324,7 @@ InstallMethod( BasisOfRowsCoeff, ### defines: BasisOfRowsCoeff (BasisCoeff)
         [ IsHomalgMatrix, IsHomalgMatrix and IsVoidMatrix ],
         
   function( M, T )
-    local R, RP, t, nr_cols, TT, TI, MI, B, nr_rows, nr, nz;
+    local R, RP, t, nr_cols, TT, TI, MI, B, nr_rows, nr, nz, interesting, start_time;
     
     if IsBound( M!.BasisOfRowsCoeff ) and IsBound( M!.BasisOfRows ) then
         if HasEval( M!.BasisOfRowsCoeff ) then
@@ -2351,7 +2351,58 @@ InstallMethod( BasisOfRowsCoeff, ### defines: BasisOfRowsCoeff (BasisCoeff)
     
     if IsBound(RP!.BasisOfRowsCoeff) then
         
-        B := RP!.BasisOfRowsCoeff( M, TT ); ResetFilterObj( TT, IsVoidMatrix );
+        interesting := ValueOption( "interesting" );
+        
+        if interesting <> fail then
+            
+            Display( "BasisOfRowsCoeff with interesting part:" );
+            Display( interesting );
+            
+            Display( "before RP!.BasisOfRowsCoeff" );
+            
+            start_time := NanosecondsSinceEpoch();
+            
+            B := RP!.BasisOfRowModule( M );
+            
+            Display( Concatenation( "BasisOfRowModule solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
+            
+            start_time := NanosecondsSinceEpoch();
+            
+            #B := RP!.BasisOfRowsCoeffViaLift( M, TT ); ResetFilterObj( TT, IsVoidMatrix );
+            
+            Display( Concatenation( "BasisOfRowsCoeffViaLift solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
+            
+            start_time := NanosecondsSinceEpoch();
+            
+            B := RP!.RelativeBasisOfRowsCoeff( M, TT, 0 ); ResetFilterObj( TT, IsVoidMatrix );
+            
+            Display( Concatenation( "RelativeBasisOfRowsCoeff(0) solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
+            
+            start_time := NanosecondsSinceEpoch();
+            
+            B := RP!.RelativeBasisOfRowsCoeff( M, TT, interesting ); ResetFilterObj( TT, IsVoidMatrix );
+            
+            Display( Concatenation( "RelativeBasisOfRowsCoeff(interesting) solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
+            
+            start_time := NanosecondsSinceEpoch();
+            
+            B := RP!.BasisOfRowsCoeff( M, TT ); ResetFilterObj( TT, IsVoidMatrix );
+            
+            Display( Concatenation( "BasisOfRowsCoeff solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
+            
+            Display( "after RP!.BasisOfRowsCoeff" );
+            
+        else
+            
+            Display( "BasisOfRowsCoeff without interesting part:" );
+            
+            Display( "before RP!.BasisOfRowsCoeff" );
+            
+            B := RP!.BasisOfRowsCoeff( M, TT ); ResetFilterObj( TT, IsVoidMatrix );
+            
+            Display( "after RP!.BasisOfRowsCoeff" );
+            
+        fi;
         
         if HasRowRankOfMatrix( B ) then
             SetRowRankOfMatrix( M, RowRankOfMatrix( B ) );
