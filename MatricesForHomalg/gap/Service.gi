@@ -2374,19 +2374,30 @@ InstallMethod( BasisOfRowsCoeff, ### defines: BasisOfRowsCoeff (BasisCoeff)
             
             start_time := NanosecondsSinceEpoch();
             
-            B := RP!.RelativeBasisOfRowsCoeff( M, TT, 0 ); ResetFilterObj( TT, IsVoidMatrix );
+            #B := RP!.RelativeBasisOfRowsCoeff( M, TT, 0 ); ResetFilterObj( TT, IsVoidMatrix );
             
             Display( Concatenation( "RelativeBasisOfRowsCoeff(0) solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
             
+            certainrows1 := CertainRows( M, [ 1 .. interesting ] );
+            certainrows2 := CertainRows( M, [ interesting + 1 .. NrRows( M ) ] );
+            Eval( certainrows1 );
+            Eval( certainrows2 );
+            
             start_time := NanosecondsSinceEpoch();
             
-            B := RP!.RelativeBasisOfRowsCoeff( M, TT, interesting ); ResetFilterObj( TT, IsVoidMatrix );
+            #SyzygiesOfRows( certainrows1, certainrows2 ); ResetFilterObj( TT, IsVoidMatrix );
+            
+            Display( Concatenation( "SyzygiesOfRows(interesting) solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
+            
+            start_time := NanosecondsSinceEpoch();
+            
+            B := RP!.RelativeBasisOfRowsCoeff( certainrows1, TT, certainrows2 ); ResetFilterObj( TT, IsVoidMatrix );
             
             Display( Concatenation( "RelativeBasisOfRowsCoeff(interesting) solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
             
             start_time := NanosecondsSinceEpoch();
             
-            B := RP!.BasisOfRowsCoeff( M, TT ); ResetFilterObj( TT, IsVoidMatrix );
+            #B := RP!.BasisOfRowsCoeff( M, TT ); ResetFilterObj( TT, IsVoidMatrix );
             
             Display( Concatenation( "BasisOfRowsCoeff solved in ", String( Float( ( NanosecondsSinceEpoch() - start_time) / 1000 / 1000 / 1000 ) ) ) );
             

@@ -110,7 +110,7 @@ BasisOfRowsCoeff :=
   end,
 
 RelativeBasisOfRowsCoeff :=
-  function( M, T, limit )
+  function( M, T, relations )
     local v, N;
     
     v := homalgStream( HomalgRing( M ) )!.variable_name;
@@ -122,7 +122,7 @@ RelativeBasisOfRowsCoeff :=
     );
     
     homalgSendBlocking(
-      [ "matrix ", N, T, " = RelativeBasisOfRowsCoeff(", M, limit, ")" ],
+      [ "matrix ", N, T, " = RelativeBasisOfRowsCoeff(", M, relations, ")" ],
       "need_command",
       "BasisCoeff"
     );

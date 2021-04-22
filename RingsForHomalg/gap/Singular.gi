@@ -580,6 +580,7 @@ proc IndicatorMatrixOfNonZeroEntries(matrix M)\n\
     BasisOfRowModule := """
 proc BasisOfRowModule (matrix M)
 {
+  return(std(M));
   if (use_liftstd) {
     matrix T;
     return(matrix(liftstd(module(M),T,"std",0)));
@@ -662,14 +663,16 @@ proc BasisOfRowsCoeff (matrix M)
 """,
 
     RelativeBasisOfRowsCoeff := """
-proc RelativeBasisOfRowsCoeff (matrix M,int limit)
+proc RelativeBasisOfRowsCoeff (matrix M,module limit)
 {
   if (use_liftstd) {
-    matrix T1;
-    module B1 = liftstd(module(M),T1,"std",limit);
+    matrix T;
+    //option("redTailSyz");
+    matrix B = liftstd(module(M),T,"std",limit);
+    return(B,T);
     
-    matrix T = T1;
-    matrix B = matrix(B1);
+    //matrix T = T1;
+    //matrix B = matrix(B1);
     
     // make sure we get the same output as when applying liftstd with limit=0
     
@@ -842,10 +845,10 @@ proc SyzygiesGeneratorsOfRows (matrix M)
     matrix T;
     module S;
     // TODO: needed?
-    option("redTailSyz");
+    //option("redTailSyz");
     liftstd(module(M),T,S,"std");
-    option("noredTailSyz");
-    return(matrix(S));
+    //option("noredTailSyz");
+    return(S);
   }
   else {
     return(SyzForHomalg(M));
@@ -868,7 +871,7 @@ proc SyzygiesGeneratorsOfRows (matrix M)
     SyzygiesGeneratorsOfColumns := "\n\
 proc SyzygiesGeneratorsOfColumns (matrix M)\n\
 {\n\
-  return(Involution(SyzForHomalg(Involution(M))));\n\
+  return(Involution(SyzygiesGeneratorsOfRows(Involution(M))));\n\
 }\n\n",
 ##  ]]></Listing>
 ##    </Description>
@@ -885,13 +888,14 @@ proc SyzygiesGeneratorsOfColumns (matrix M)\n\
     RelativeSyzygiesGeneratorsOfRows := """
 proc RelativeSyzygiesGeneratorsOfRows (matrix M1, matrix M2)
 {
+  return(modulo(M1, M2));
   if (use_liftstd) {
     matrix T;
     module S;
     // TODO: needed?
-    option("redTailSyz");
+    //option("redTailSyz");
     liftstd(module(concat(M1,M2)),T,S,"std",ncols(M1));
-    option("noredTailSyz");
+    //option("noredTailSyz");
     // TODO: additional BasisOfRowModule?
     return(submat(matrix(S),1..ncols(M1),1..ncols(S)));
   }
