@@ -387,7 +387,15 @@ InstallGlobalFunction( LogicalImplicationsForOneHomalgObject,
         propA := statement[1];
         prop := statement[3];
         
-        InstallTrueMethod( prop, filter and propA );
+        #InstallTrueMethod( prop, filter and propA );
+        
+        InstallImmediateMethod( prop,
+            filter and propA,
+            function( o )
+                
+                return true;
+                
+            end );
         
         InstallImmediateMethod( propA,
                 filter and Tester( prop ), 0,

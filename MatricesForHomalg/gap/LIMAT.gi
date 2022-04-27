@@ -23,8 +23,7 @@ InstallLogicalImplicationsForHomalgBasicObjects( LogicalImplicationsForHomalgMat
 ####################################
 
 ##
-InstallImmediateMethod( IsEmptyMatrix,
-        IsHomalgMatrix and HasNrRows and HasNrColumns, 0,
+InstallMethod( IsEmptyMatrix,        [ IsHomalgMatrix and HasNrRows and HasNrColumns ], 0,
         
   function( M )
     
@@ -37,8 +36,7 @@ InstallImmediateMethod( IsEmptyMatrix,
 end );
 
 ##
-InstallImmediateMethod( IsOne,
-        IsHomalgMatrix and HasNrRows and HasNrColumns, 0,
+InstallMethod( IsOne,        [ IsHomalgMatrix and HasNrRows and HasNrColumns ], 0,
         
   function( M )
     
@@ -51,8 +49,7 @@ InstallImmediateMethod( IsOne,
 end );
 
 ##
-InstallImmediateMethod( IsOne,
-        IsHomalgMatrix and HasNrRows and HasNrColumns, 0,
+InstallMethod( IsOne,        [ IsHomalgMatrix and HasNrRows and HasNrColumns ], 0,
         
   function( M )
     
@@ -65,8 +62,7 @@ InstallImmediateMethod( IsOne,
 end );
 
 ##
-InstallImmediateMethod( IsOne,
-        IsHomalgMatrix and IsPermutationMatrix and HasPositionOfFirstNonZeroEntryPerRow and HasNrRows, 0,
+InstallMethod( IsOne,        [ IsHomalgMatrix and IsPermutationMatrix and HasPositionOfFirstNonZeroEntryPerRow and HasNrRows ], 0,
         
   function( M )
     
@@ -75,8 +71,7 @@ InstallImmediateMethod( IsOne,
 end );
 
 ##
-InstallImmediateMethod( IsOne,
-        IsHomalgMatrix and IsPermutationMatrix and HasPositionOfFirstNonZeroEntryPerColumn and HasNrColumns, 0,
+InstallMethod( IsOne,        [ IsHomalgMatrix and IsPermutationMatrix and HasPositionOfFirstNonZeroEntryPerColumn and HasNrColumns ], 0,
         
   function( M )
     
@@ -85,8 +80,7 @@ InstallImmediateMethod( IsOne,
 end );
 
 ##
-InstallImmediateMethod( IsZero,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow, 0,
+InstallMethod( IsZero,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow ], 0,
         
   function( M )
     
@@ -95,8 +89,7 @@ InstallImmediateMethod( IsZero,
 end );
 
 ##
-InstallImmediateMethod( IsZero,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn, 0,
+InstallMethod( IsZero,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn ], 0,
         
   function( M )
     
@@ -105,8 +98,7 @@ InstallImmediateMethod( IsZero,
 end );
 
 ##
-InstallImmediateMethod( IsZero,
-        IsHomalgMatrix and HasIsRightRegular and HasIsEmptyMatrix, 0,
+InstallMethod( IsZero,        [ IsHomalgMatrix and HasIsRightRegular and HasIsEmptyMatrix ], 0,
         
   function( M )
     
@@ -119,8 +111,7 @@ InstallImmediateMethod( IsZero,
 end );
 
 ##
-InstallImmediateMethod( IsZero,
-        IsHomalgMatrix and HasIsLeftRegular and HasIsEmptyMatrix, 0,
+InstallMethod( IsZero,        [ IsHomalgMatrix and HasIsLeftRegular and HasIsEmptyMatrix ], 0,
         
   function( M )
     
@@ -133,8 +124,7 @@ InstallImmediateMethod( IsZero,
 end );
 
 ##
-InstallImmediateMethod( IsZero,
-        IsHomalgMatrix and HasZeroRows and HasNrRows, 0,
+InstallMethod( IsZero,        [ IsHomalgMatrix and HasZeroRows and HasNrRows ], 0,
         
   function( M )
     
@@ -143,8 +133,7 @@ InstallImmediateMethod( IsZero,
 end );
 
 ##
-InstallImmediateMethod( IsZero,
-        IsHomalgMatrix and HasZeroColumns and HasNrColumns, 0,
+InstallMethod( IsZero,        [ IsHomalgMatrix and HasZeroColumns and HasNrColumns ], 0,
         
   function( M )
     
@@ -153,8 +142,7 @@ InstallImmediateMethod( IsZero,
 end );
 
 ##
-InstallImmediateMethod( IsRightInvertibleMatrix,
-        IsHomalgMatrix and IsSubidentityMatrix, 0,
+InstallMethod( IsRightInvertibleMatrix,        [ IsHomalgMatrix and IsSubidentityMatrix ], 0,
         
   function( M )
     
@@ -163,8 +151,7 @@ InstallImmediateMethod( IsRightInvertibleMatrix,
 end );
 
 ##
-InstallImmediateMethod( IsRightInvertibleMatrix,
-        IsHomalgMatrix and HasNrRows, 0,
+InstallMethod( IsRightInvertibleMatrix,        [ IsHomalgMatrix and HasNrRows ], 0,
         
   function( M )
     
@@ -177,8 +164,7 @@ InstallImmediateMethod( IsRightInvertibleMatrix,
 end );
 
 ##
-InstallImmediateMethod( IsLeftInvertibleMatrix,
-        IsHomalgMatrix and IsSubidentityMatrix, 0,
+InstallMethod( IsLeftInvertibleMatrix,        [ IsHomalgMatrix and IsSubidentityMatrix ], 0,
         
   function( M )
     
@@ -187,8 +173,7 @@ InstallImmediateMethod( IsLeftInvertibleMatrix,
 end );
 
 ##
-InstallImmediateMethod( IsLeftInvertibleMatrix,
-        IsHomalgMatrix and HasNrColumns, 0,
+InstallMethod( IsLeftInvertibleMatrix,        [ IsHomalgMatrix and HasNrColumns ], 0,
         
   function( M )
     
@@ -201,8 +186,7 @@ InstallImmediateMethod( IsLeftInvertibleMatrix,
 end );
 
 ##
-InstallImmediateMethod( IsRightRegular,
-        IsHomalgMatrix and IsLowerStairCaseMatrix and HasZeroColumns, 0,
+InstallMethod( IsRightRegular,        [ IsHomalgMatrix and IsLowerStairCaseMatrix and HasZeroColumns ], 0,
         
   function( M )
     local R;
@@ -218,8 +202,7 @@ InstallImmediateMethod( IsRightRegular,
 end );
 
 ##
-InstallImmediateMethod( IsRightRegular,
-        IsHomalgMatrix and HasNrColumns and HasIsZero, 0,
+InstallMethod( IsRightRegular,        [ IsHomalgMatrix and HasNrColumns and HasIsZero ], 0,
         
   function( M )
     local R;
@@ -235,8 +218,7 @@ InstallImmediateMethod( IsRightRegular,
 end );
 
 ##
-InstallImmediateMethod( IsLeftRegular,
-        IsHomalgMatrix and IsUpperStairCaseMatrix and HasZeroRows, 0,
+InstallMethod( IsLeftRegular,        [ IsHomalgMatrix and IsUpperStairCaseMatrix and HasZeroRows ], 0,
         
   function( M )
     local R;
@@ -252,8 +234,7 @@ InstallImmediateMethod( IsLeftRegular,
 end );
 
 ##
-InstallImmediateMethod( IsLeftRegular,
-        IsHomalgMatrix and HasNrRows and HasIsZero, 0,
+InstallMethod( IsLeftRegular,        [ IsHomalgMatrix and HasNrRows and HasIsZero ], 0,
         
   function( M )
     local R;
@@ -269,8 +250,7 @@ InstallImmediateMethod( IsLeftRegular,
 end );
 
 ##
-InstallImmediateMethod( IsUpperStairCaseMatrix,
-        IsHomalgMatrix and HasNrRows, 0,
+InstallMethod( IsUpperStairCaseMatrix,        [ IsHomalgMatrix and HasNrRows ], 0,
         
   function( M )
     
@@ -283,8 +263,7 @@ InstallImmediateMethod( IsUpperStairCaseMatrix,
 end );
 
 ##
-InstallImmediateMethod( IsLowerStairCaseMatrix,
-        IsHomalgMatrix and HasNrColumns, 0,
+InstallMethod( IsLowerStairCaseMatrix,        [ IsHomalgMatrix and HasNrColumns ], 0,
         
   function( M )
     
@@ -297,8 +276,7 @@ InstallImmediateMethod( IsLowerStairCaseMatrix,
 end );
 
 ##
-InstallImmediateMethod( RowRankOfMatrix,
-        IsHomalgMatrix and IsUpperStairCaseMatrix and HasNonZeroRows, 0,
+InstallMethod( RowRankOfMatrix,        [ IsHomalgMatrix and IsUpperStairCaseMatrix and HasNonZeroRows ], 0,
         
   function( M )
     local R;
@@ -314,8 +292,7 @@ InstallImmediateMethod( RowRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( ColumnRankOfMatrix,
-        IsHomalgMatrix and IsLowerStairCaseMatrix and HasNonZeroColumns, 0,
+InstallMethod( ColumnRankOfMatrix,        [ IsHomalgMatrix and IsLowerStairCaseMatrix and HasNonZeroColumns ], 0,
         
   function( M )
     local R;
@@ -337,8 +314,7 @@ end );
 ####################################
 
 ##
-InstallImmediateMethod( NrRows,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow, 0,
+InstallMethod( NrRows,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow ], 0,
         
   function( M )
     
@@ -347,8 +323,7 @@ InstallImmediateMethod( NrRows,
 end );
 
 ##
-InstallImmediateMethod( NrColumns,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn, 0,
+InstallMethod( NrColumns,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn ], 0,
         
   function( M )
     
@@ -357,8 +332,7 @@ InstallImmediateMethod( NrColumns,
 end );
 
 ##
-InstallImmediateMethod( RowRankOfMatrix,
-        IsHomalgMatrix and IsOne and HasNrRows, 0,
+InstallMethod( RowRankOfMatrix,        [ IsHomalgMatrix and IsOne and HasNrRows ], 0,
         
   function( M )
     
@@ -367,8 +341,7 @@ InstallImmediateMethod( RowRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( ColumnRankOfMatrix,
-        IsHomalgMatrix and IsOne and HasNrColumns, 0,
+InstallMethod( ColumnRankOfMatrix,        [ IsHomalgMatrix and IsOne and HasNrColumns ], 0,
         
   function( M )
     
@@ -377,8 +350,7 @@ InstallImmediateMethod( ColumnRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( RowRankOfMatrix,
-        IsHomalgMatrix and IsZero, 0,
+InstallMethod( RowRankOfMatrix,        [ IsHomalgMatrix and IsZero ], 0,
         
   function( M )
     
@@ -387,8 +359,7 @@ InstallImmediateMethod( RowRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( ColumnRankOfMatrix,
-        IsHomalgMatrix and IsZero, 0,
+InstallMethod( ColumnRankOfMatrix,        [ IsHomalgMatrix and IsZero ], 0,
         
   function( M )
     
@@ -397,8 +368,7 @@ InstallImmediateMethod( ColumnRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( RowRankOfMatrix,
-        IsHomalgMatrix and HasIsLeftRegular and HasNrRows, 0,
+InstallMethod( RowRankOfMatrix,        [ IsHomalgMatrix and HasIsLeftRegular and HasNrRows ], 0,
         
   function( M )
     
@@ -411,8 +381,7 @@ InstallImmediateMethod( RowRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( ColumnRankOfMatrix,
-        IsHomalgMatrix and HasIsRightRegular and HasNrColumns, 0,
+InstallMethod( ColumnRankOfMatrix,        [ IsHomalgMatrix and HasIsRightRegular and HasNrColumns ], 0,
         
   function( M )
     
@@ -425,8 +394,7 @@ InstallImmediateMethod( ColumnRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( RowRankOfMatrix,
-        IsHomalgMatrix and HasColumnRankOfMatrix, 0,
+InstallMethod( RowRankOfMatrix,        [ IsHomalgMatrix and HasColumnRankOfMatrix ], 0,
         
   function( M )
     local R;
@@ -442,8 +410,7 @@ InstallImmediateMethod( RowRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( ColumnRankOfMatrix,
-        IsHomalgMatrix and HasRowRankOfMatrix, 0,
+InstallMethod( ColumnRankOfMatrix,        [ IsHomalgMatrix and HasRowRankOfMatrix ], 0,
         
   function( M )
     local R;
@@ -459,8 +426,7 @@ InstallImmediateMethod( ColumnRankOfMatrix,
 end );
 
 ##
-InstallImmediateMethod( ZeroRows,
-        IsHomalgMatrix and HasIsZero and HasNrRows, 0,
+InstallMethod( ZeroRows,        [ IsHomalgMatrix and HasIsZero and HasNrRows ], 0,
         
   function( M )
     
@@ -473,8 +439,7 @@ InstallImmediateMethod( ZeroRows,
 end );
 
 ##
-InstallImmediateMethod( ZeroRows,
-        IsHomalgMatrix and IsOne, 0,
+InstallMethod( ZeroRows,        [ IsHomalgMatrix and IsOne ], 0,
         
   function( M )
     
@@ -483,8 +448,7 @@ InstallImmediateMethod( ZeroRows,
 end );
 
 ##
-InstallImmediateMethod( ZeroRows,
-        IsHomalgMatrix and IsZero and HasNrRows, 0,
+InstallMethod( ZeroRows,        [ IsHomalgMatrix and IsZero and HasNrRows ], 0,
         
   function( M )
     
@@ -493,8 +457,7 @@ InstallImmediateMethod( ZeroRows,
 end );
 
 ##
-InstallImmediateMethod( ZeroRows,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow and HasNrRows, 0,
+InstallMethod( ZeroRows,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow and HasNrRows ], 0,
         
   function( M )
     local pos;
@@ -506,8 +469,7 @@ InstallImmediateMethod( ZeroRows,
 end );
 
 ##
-InstallImmediateMethod( ZeroRows,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn and IsSubidentityMatrix and HasNrRows, 0,
+InstallMethod( ZeroRows,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn and IsSubidentityMatrix and HasNrRows ], 0,
         
   function( M )
     local pos;
@@ -519,8 +481,7 @@ InstallImmediateMethod( ZeroRows,
 end );
 
 ##
-InstallImmediateMethod( ZeroRows,
-        IsHomalgMatrix and HasEvalCertainRows, 0,
+InstallMethod( ZeroRows,        [ IsHomalgMatrix and HasEvalCertainRows ], 0,
         
   function( M )
     local e;
@@ -539,8 +500,7 @@ InstallImmediateMethod( ZeroRows,
 end );
 
 ##
-InstallImmediateMethod( ZeroColumns,
-        IsHomalgMatrix and HasIsZero and HasNrColumns, 0,
+InstallMethod( ZeroColumns,        [ IsHomalgMatrix and HasIsZero and HasNrColumns ], 0,
         
   function( M )
     
@@ -553,8 +513,7 @@ InstallImmediateMethod( ZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( ZeroColumns,
-        IsHomalgMatrix and IsOne, 0,
+InstallMethod( ZeroColumns,        [ IsHomalgMatrix and IsOne ], 0,
         
   function( M )
     
@@ -563,8 +522,7 @@ InstallImmediateMethod( ZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( ZeroColumns,
-        IsHomalgMatrix and IsZero and HasNrColumns, 0,
+InstallMethod( ZeroColumns,        [ IsHomalgMatrix and IsZero and HasNrColumns ], 0,
         
   function( M )
     
@@ -573,8 +531,7 @@ InstallImmediateMethod( ZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( ZeroColumns,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn and HasNrColumns, 0,
+InstallMethod( ZeroColumns,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerColumn and HasNrColumns ], 0,
         
   function( M )
     local pos;
@@ -586,8 +543,7 @@ InstallImmediateMethod( ZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( ZeroColumns,
-        IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow and IsSubidentityMatrix and HasNrColumns, 0,
+InstallMethod( ZeroColumns,        [ IsHomalgMatrix and HasPositionOfFirstNonZeroEntryPerRow and IsSubidentityMatrix and HasNrColumns ], 0,
         
   function( M )
     local pos;
@@ -599,8 +555,7 @@ InstallImmediateMethod( ZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( ZeroColumns,
-        IsHomalgMatrix and HasEvalCertainColumns, 0,
+InstallMethod( ZeroColumns,        [ IsHomalgMatrix and HasEvalCertainColumns ], 0,
         
   function( M )
     local e;
@@ -619,8 +574,7 @@ InstallImmediateMethod( ZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( NonZeroRows,
-        IsHomalgMatrix and HasZeroRows and HasNrRows, 0,
+InstallMethod( NonZeroRows,        [ IsHomalgMatrix and HasZeroRows and HasNrRows ], 0,
         
   function( M )
     
@@ -629,8 +583,7 @@ InstallImmediateMethod( NonZeroRows,
 end );
 
 ##
-InstallImmediateMethod( NonZeroRows,
-        IsHomalgMatrix and IsOne and HasNrRows, 0,
+InstallMethod( NonZeroRows,        [ IsHomalgMatrix and IsOne and HasNrRows ], 0,
         
   function( M )
     
@@ -639,8 +592,7 @@ InstallImmediateMethod( NonZeroRows,
 end );
 
 ##
-InstallImmediateMethod( NonZeroRows,
-        IsHomalgMatrix and IsZero, 0,
+InstallMethod( NonZeroRows,        [ IsHomalgMatrix and IsZero ], 0,
         
   function( M )
     
@@ -649,8 +601,7 @@ InstallImmediateMethod( NonZeroRows,
 end );
 
 ##
-InstallImmediateMethod( NonZeroColumns,
-        IsHomalgMatrix and HasZeroColumns and HasNrColumns, 0,
+InstallMethod( NonZeroColumns,        [ IsHomalgMatrix and HasZeroColumns and HasNrColumns ], 0,
         
   function( M )
     
@@ -659,8 +610,7 @@ InstallImmediateMethod( NonZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( NonZeroColumns,
-        IsHomalgMatrix and IsOne and HasNrColumns, 0,
+InstallMethod( NonZeroColumns,        [ IsHomalgMatrix and IsOne and HasNrColumns ], 0,
         
   function( M )
     
@@ -669,8 +619,7 @@ InstallImmediateMethod( NonZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( NonZeroColumns,
-        IsHomalgMatrix and IsZero, 0,
+InstallMethod( NonZeroColumns,        [ IsHomalgMatrix and IsZero ], 0,
         
   function( M )
     
@@ -679,8 +628,7 @@ InstallImmediateMethod( NonZeroColumns,
 end );
 
 ##
-InstallImmediateMethod( PositionOfFirstNonZeroEntryPerRow,
-        IsHomalgMatrix and IsOne and HasNrRows, 0,
+InstallMethod( PositionOfFirstNonZeroEntryPerRow,        [ IsHomalgMatrix and IsOne and HasNrRows ], 0,
         
   function( M )
     
@@ -693,8 +641,7 @@ InstallImmediateMethod( PositionOfFirstNonZeroEntryPerRow,
 end );
 
 ##
-InstallImmediateMethod( PositionOfFirstNonZeroEntryPerRow,
-        IsHomalgMatrix and IsZero and HasNrRows, 0,
+InstallMethod( PositionOfFirstNonZeroEntryPerRow,        [ IsHomalgMatrix and IsZero and HasNrRows ], 0,
         
   function( M )
     
@@ -703,8 +650,7 @@ InstallImmediateMethod( PositionOfFirstNonZeroEntryPerRow,
 end );
 
 ##
-InstallImmediateMethod( PositionOfFirstNonZeroEntryPerColumn,
-        IsHomalgMatrix and IsOne and HasNrColumns, 0,
+InstallMethod( PositionOfFirstNonZeroEntryPerColumn,        [ IsHomalgMatrix and IsOne and HasNrColumns ], 0,
         
   function( M )
     
@@ -717,8 +663,7 @@ InstallImmediateMethod( PositionOfFirstNonZeroEntryPerColumn,
 end );
 
 ##
-InstallImmediateMethod( PositionOfFirstNonZeroEntryPerColumn,
-        IsHomalgMatrix and IsZero and HasNrColumns, 0,
+InstallMethod( PositionOfFirstNonZeroEntryPerColumn,        [ IsHomalgMatrix and IsZero and HasNrColumns ], 0,
         
   function( M )
     

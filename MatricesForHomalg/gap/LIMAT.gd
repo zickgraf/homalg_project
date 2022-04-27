@@ -114,86 +114,87 @@ InstallValue( LogicalImplicationsForHomalgMatrices,
           [ IsZero,
             "implies", IsLowerStairCaseMatrix ],
           
-          [ IsZero,
-            "implies", IsStrictUpperTriangularMatrix ],
-          
-          [ IsZero,
-            "implies", IsStrictLowerTriangularMatrix ],
-          
-          [ IsOne,
-            "implies", IsPermutationMatrix ],
-          
-          [ IsOne,
-            "implies", IsScalarMatrix ],
-          
-          [ IsScalarMatrix,
-            "implies", IsDiagonalMatrix ],
-          
-          [ IsOne,
-            "implies", IsUpperStairCaseMatrix ],
-          
-          [ IsOne,
-            "implies", IsLowerStairCaseMatrix ],
-          
-          [ IsSubidentityMatrix, "and", IsInvertibleMatrix,
-            "imply", IsPermutationMatrix ],
-          
-          [ IsPermutationMatrix,
-            "implies", IsInvertibleMatrix ],
-          
-          [ IsPermutationMatrix,
-            "implies", IsSubidentityMatrix ],
-          
-          [ IsSpecialSubidentityMatrix,
-            "implies", IsSubidentityMatrix ],
-          
-          ## a split injective morphism (of free modules) is injective
-          [ IsRightInvertibleMatrix,
-            "implies", IsLeftRegular ],
-          
-          [ IsLeftInvertibleMatrix,
-            "implies", IsRightRegular ],
-          
-          ## an isomorphism is split injective
-          [ IsInvertibleMatrix,
-            "implies", IsRightInvertibleMatrix ],
-          
-          ## an isomorphism is split surjective
-          [ IsInvertibleMatrix,
-            "implies", IsLeftInvertibleMatrix ],
-          
-          ## a split surjective and split injective morphism (of free modules) is an isomorphism
-          [ IsLeftInvertibleMatrix, "and", IsRightInvertibleMatrix,
-            "imply", IsInvertibleMatrix ],
-          
-          [ IsDiagonalMatrix,
-            "implies", IsUpperTriangularMatrix ],
-          
-          [ IsDiagonalMatrix,
-            "implies", IsLowerTriangularMatrix ],
-          
-          [ IsStrictUpperTriangularMatrix,
-            "implies", IsUpperTriangularMatrix ],
-          
-          [ IsStrictLowerTriangularMatrix,
-            "implies", IsLowerTriangularMatrix ],
-          
-          [ IsUpperStairCaseMatrix,
-            "implies", IsUpperTriangularMatrix ],
-          
-          [ IsLowerStairCaseMatrix,
-            "implies", IsLowerTriangularMatrix ],
-          
-          [ IsUpperTriangularMatrix,
-            "implies", IsTriangularMatrix ],
-          
-          [ IsLowerTriangularMatrix,
-            "implies", IsTriangularMatrix ],
+          #[ IsZero,
+          #  "implies", IsStrictUpperTriangularMatrix ],
+          #
+          #[ IsZero,
+          #  "implies", IsStrictLowerTriangularMatrix ],
+          #
+          #[ IsOne,
+          #  "implies", IsPermutationMatrix ],
+          #
+          #[ IsOne,
+          #  "implies", IsScalarMatrix ],
+          #
+          #[ IsScalarMatrix,
+          #  "implies", IsDiagonalMatrix ],
+          #
+          #[ IsOne,
+          #  "implies", IsUpperStairCaseMatrix ],
+          #
+          #[ IsOne,
+          #  "implies", IsLowerStairCaseMatrix ],
+          #
+          #[ IsSubidentityMatrix, "and", IsInvertibleMatrix,
+          #  "imply", IsPermutationMatrix ],
+          #
+          #[ IsPermutationMatrix,
+          #  "implies", IsInvertibleMatrix ],
+          #
+          #[ IsPermutationMatrix,
+          #  "implies", IsSubidentityMatrix ],
+          #
+          #[ IsSpecialSubidentityMatrix,
+          #  "implies", IsSubidentityMatrix ],
+          #
+          ### a split injective morphism (of free modules) is injective
+          #[ IsRightInvertibleMatrix,
+          #  "implies", IsLeftRegular ],
+          #
+          #[ IsLeftInvertibleMatrix,
+          #  "implies", IsRightRegular ],
+          #
+          ### an isomorphism is split injective
+          #[ IsInvertibleMatrix,
+          #  "implies", IsRightInvertibleMatrix ],
+          #
+          ### an isomorphism is split surjective
+          #[ IsInvertibleMatrix,
+          #  "implies", IsLeftInvertibleMatrix ],
+          #
+          ### a split surjective and split injective morphism (of free modules) is an isomorphism
+          #[ IsLeftInvertibleMatrix, "and", IsRightInvertibleMatrix,
+          #  "imply", IsInvertibleMatrix ],
+          #
+          #[ IsDiagonalMatrix,
+          #  "implies", IsUpperTriangularMatrix ],
+          #
+          #[ IsDiagonalMatrix,
+          #  "implies", IsLowerTriangularMatrix ],
+          #
+          #[ IsStrictUpperTriangularMatrix,
+          #  "implies", IsUpperTriangularMatrix ],
+          #
+          #[ IsStrictLowerTriangularMatrix,
+          #  "implies", IsLowerTriangularMatrix ],
+          #
+          #[ IsUpperStairCaseMatrix,
+          #  "implies", IsUpperTriangularMatrix ],
+          #
+          #[ IsLowerStairCaseMatrix,
+          #  "implies", IsLowerTriangularMatrix ],
+          #
+          #[ IsUpperTriangularMatrix,
+          #  "implies", IsTriangularMatrix ],
+          #
+          #[ IsLowerTriangularMatrix,
+          #  "implies", IsTriangularMatrix ],
           
           [ IsUpperTriangularMatrix, "and", IsLowerTriangularMatrix,
             "imply", IsDiagonalMatrix ],
           
-          ] );
+          ]
+          );
 
 ##
 InstallValue( LogicalImplicationsForHomalgMatricesOverSpecialRings,

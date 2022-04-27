@@ -2955,7 +2955,35 @@ InstallGlobalFunction( HomalgZeroMatrix,
                 matrix, type,
                 NrRows, arg[1],
                 NrColumns, arg[2],
-                IsZero, true );
+                IsZero, true
+                ,ZeroRows, [ 1 .. arg[1] ],
+                NonZeroRows, [],
+                PositionOfFirstNonZeroEntryPerRow, ListWithIdenticalEntries( arg[1], 0 ),
+                ZeroColumns, [ 1 .. arg[2] ],
+                NonZeroColumns, [],
+                PositionOfFirstNonZeroEntryPerColumn, ListWithIdenticalEntries( arg[2], 0 ),
+                IsEmptyMatrix, arg[1] = 0 or arg[2] = 0,
+                IsOne, arg[1] = 0 and arg[2] = 0,
+                IsPermutationMatrix, arg[1] = 0 and arg[2] = 0,
+                IsSubidentityMatrix, arg[1] = 0 and arg[2] = 0,
+                IsSpecialSubidentityMatrix, arg[1] = 0 and arg[2] = 0,
+                IsInvertibleMatrix, arg[1] = 0 and arg[2] = 0,
+                IsUpperStairCaseMatrix, true,
+                IsLowerStairCaseMatrix, true,
+                RowRankOfMatrix, 0,
+                ColumnRankOfMatrix, 0,
+                IsRightInvertibleMatrix, arg[1] = 0, # FIXME: take zero ring into account
+                IsLeftInvertibleMatrix, arg[2] = 0, # FIXME: take zero ring into account
+                IsLeftRegular, arg[1] <= 1, # FIXME: take zero ring into account
+                IsRightRegular, arg[2] <= 1, # FIXME: take zero ring into account
+                IsDiagonalMatrix, true,
+                IsUpperTriangularMatrix, true,
+                IsStrictUpperTriangularMatrix, true,
+                IsLowerTriangularMatrix, true,
+                IsStrictLowerTriangularMatrix, true,
+                IsScalarMatrix, true
+                , IsNoImmediateMethodsObject, true
+                );
     else
         ## Objectify:
         ObjectifyWithAttributes(
@@ -3023,7 +3051,36 @@ InstallGlobalFunction( HomalgIdentityMatrix,
                 matrix, type,
                 NrRows, arg[1],
                 NrColumns, arg[1],
-                IsOne, true );
+                IsOne, true
+                ,
+                IsZero, arg[1] = 0,
+                ZeroRows, [ ],
+                NonZeroRows, [ 1 .. arg[1] ],
+                PositionOfFirstNonZeroEntryPerRow, [ 1 .. arg[1] ],
+                ZeroColumns, [ ],
+                NonZeroColumns, [ 1 .. arg[1] ],
+                PositionOfFirstNonZeroEntryPerColumn, [ 1 .. arg[1] ],
+                IsEmptyMatrix, arg[1] = 0,
+                IsPermutationMatrix, true,
+                IsSubidentityMatrix, true,
+                IsSpecialSubidentityMatrix, true,
+                IsInvertibleMatrix, true,
+                IsUpperStairCaseMatrix, true,
+                IsLowerStairCaseMatrix, true,
+                RowRankOfMatrix, arg[1],
+                ColumnRankOfMatrix, arg[1],
+                IsRightInvertibleMatrix, true,
+                IsLeftInvertibleMatrix, true,
+                IsLeftRegular, true,
+                IsRightRegular, true,
+                IsDiagonalMatrix, true,
+                IsUpperTriangularMatrix, true,
+                IsStrictUpperTriangularMatrix, false,
+                IsLowerTriangularMatrix, true,
+                IsStrictLowerTriangularMatrix, false,
+                IsScalarMatrix, true
+                , IsNoImmediateMethodsObject, true
+            );
     else
         ## Objectify:
         ObjectifyWithAttributes(
