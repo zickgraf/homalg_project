@@ -1381,6 +1381,8 @@ InstallMethod( UnionOfColumnsOp,
   function( R, nr_rows, L )
     local result;
     
+    L := Filtered( L, l -> l <> fail );
+    
     result := HomalgMatrixWithAttributes( [
          EvalUnionOfColumns, L,
          NrRows, nr_rows,
@@ -2712,11 +2714,13 @@ InstallGlobalFunction( HomalgMatrix,
                     matrix, type,
                     NrRows, Length( M ),
                     NrColumns, Length( M[1] ),
+                IsNoImmediateMethodsObject, true,
                     Eval, homalgInternalMatrixHull( M ) );
         elif IsList( M ) then
             ## Objectify:
             ObjectifyWithAttributes(
                     matrix, type,
+                IsNoImmediateMethodsObject, true,
                     Eval, homalgInternalMatrixHull( M ) );
             if M = [ ] then
                 SetNrRows( matrix, 0 );
@@ -2744,11 +2748,13 @@ InstallGlobalFunction( HomalgMatrix,
                         matrix, type,
                         NrRows, arg[2],
                         NrColumns, arg[3],
+                IsNoImmediateMethodsObject, true,
                         Eval, M );
             else
                 ## Objectify:
                 ObjectifyWithAttributes(
                         matrix, type,
+                IsNoImmediateMethodsObject, true,
                         Eval, M );
                 
                 if nr_rows then
@@ -2781,6 +2787,7 @@ InstallGlobalFunction( HomalgMatrix,
                     matrix, type,
                     NrRows, arg[2],
                     NrColumns, arg[3],
+                IsNoImmediateMethodsObject, true,
                     Eval, M );
         else
             ## Objectify:
@@ -2875,7 +2882,7 @@ InstallGlobalFunction( HomalgMatrixWithAttributes,
     
     ## ObjectifyWithAttributes:
     CallFuncList( ObjectifyWithAttributes,
-            Concatenation( [ matrix, TypeOfHomalgMatrix( R ) ], attributes )
+            Concatenation( [ matrix, TypeOfHomalgMatrix( R ), IsNoImmediateMethodsObject, true ], attributes )
             );
     
     if HOMALG_MATRICES.Eager = true and not IsEmptyMatrix( matrix ) then
@@ -2908,8 +2915,16 @@ end );
 ##  <#/GAPDoc>
 ##
 InstallGlobalFunction( HomalgZeroMatrix,
-  function( arg ) ## the zero matrix
-    local R, type, matrix, nr_rows, nr_columns;
+  function( arg1, arg2, arg3 ) ## the zero matrix
+    local arg, R, type, matrix, nr_rows, nr_columns;
+    
+    #Display( "##############" );
+    #Display( arg1 );
+    #Display( arg2 );
+    #Display( "##############" );
+    #Display( "" );
+    
+    arg := [ arg1, arg2, arg3 ];
     
     R := arg[Length( arg )];
     
@@ -2950,24 +2965,86 @@ InstallGlobalFunction( HomalgZeroMatrix,
             fi;
         fi;
         
+        if not IsBound( R!.MyCachedZeroMatrices ) then
+            R!.MyCachedZeroMatrices := [];
+        fi;
+        
+        # shift by 1 so we can store matrices with 0 rows/columns
+        if not IsBound( R!.MyCachedZeroMatrices[arg[1]+1] ) then
+            R!.MyCachedZeroMatrices[arg[1]+1] := [];
+        fi;
+        
+        if IsBound( R!.MyCachedZeroMatrices[arg[1]+1][arg[2]+1] ) then
+            
+            return R!.MyCachedZeroMatrices[arg[1]+1,arg[2]+1];
+            
+        fi;
+        
         ## Objectify:
         ObjectifyWithAttributes(
                 matrix, type,
                 NrRows, arg[1],
                 NrColumns, arg[2],
-                IsZero, true );
+                IsZero, true,
+                ZeroRows, [ 1 .. arg[1] ],
+                NonZeroRows, [],
+                PositionOfFirstNonZeroEntryPerRow, ListWithIdenticalEntries( arg[1], 0 ),
+                ZeroColumns, [ 1 .. arg[2] ],
+                NonZeroColumns, [],
+                PositionOfFirstNonZeroEntryPerColumn, ListWithIdenticalEntries( arg[2], 0 ),
+                IsEmptyMatrix, arg[1] = 0 or arg[2] = 0,
+                IsOne, arg[1] = 0 and arg[2] = 0,
+                IsPermutationMatrix, arg[1] = 0 and arg[2] = 0,
+                IsSubidentityMatrix, arg[1] = 0 and arg[2] = 0,
+                IsSpecialSubidentityMatrix, arg[1] = 0 and arg[2] = 0,
+                IsInvertibleMatrix, arg[1] = 0 and arg[2] = 0,
+                IsUpperStairCaseMatrix, true,
+                IsLowerStairCaseMatrix, true,
+                RowRankOfMatrix, 0,
+                ColumnRankOfMatrix, 0,
+                IsRightInvertibleMatrix, arg[1] = 0, # FIXME: take zero ring into account
+                IsLeftInvertibleMatrix, arg[2] = 0, # FIXME: take zero ring into account
+                IsLeftRegular, arg[1] <= 1, # FIXME: take zero ring into account
+                IsRightRegular, arg[2] <= 1, # FIXME: take zero ring into account
+                IsDiagonalMatrix, true,
+                IsUpperTriangularMatrix, true,
+                IsStrictUpperTriangularMatrix, true,
+                IsLowerTriangularMatrix, true,
+                IsStrictLowerTriangularMatrix, true,
+                IsScalarMatrix, true
+                , IsNoImmediateMethodsObject, true
+                );
+                
+            R!.MyCachedZeroMatrices[arg[1]+1,arg[2]+1] := matrix;
+                
     else
         ## Objectify:
         ObjectifyWithAttributes(
                 matrix, type,
-                IsZero, true );
+                IsZero, true,
+                IsUpperStairCaseMatrix, true,
+                IsLowerStairCaseMatrix, true );
         
         if nr_rows then
+            
             SetNrRows( matrix, arg[1] );
+            SetZeroRows( matrix, [ 1 .. arg[1] ] );
+            
+            if arg[1] = 0 then
+                SetIsEmptyMatrix( matrix, true );
+            fi;
+            
         fi;
         
         if nr_columns then
+            
             SetNrColumns( matrix, arg[2] );
+            SetZeroColumns( matrix, [ 1 .. arg[2] ] );
+            
+            if arg[2] = 0 then
+                SetIsEmptyMatrix( matrix, true );
+            fi;
+            
         fi;
     fi;
     
@@ -2998,8 +3075,10 @@ end );
 ##  <#/GAPDoc>
 ##
 InstallGlobalFunction( HomalgIdentityMatrix,
-  function( arg ) ## the identity matrix
+  function( arg1, arg2 ) ## the identity matrix
     local R, type, matrix;
+    
+    arg := [ arg1, arg2 ];
     
     R := arg[Length( arg )];
     
@@ -3018,12 +3097,53 @@ InstallGlobalFunction( HomalgIdentityMatrix,
     matrix := rec( ring := R );
     
     if Length( arg ) > 1 and arg[1] in NonnegativeIntegers then
+        
+        if not IsBound( R!.MyCachedIdentityMatrices ) then
+            R!.MyCachedIdentityMatrices := [];
+        fi;
+        
+        # shift by 1 so we can store matrices with 0 rows/columns
+        if IsBound( R!.MyCachedIdentityMatrices[arg[1]+1] ) then
+            return R!.MyCachedIdentityMatrices[arg[1]+1];
+        fi;
+        
         ## Objectify:
         ObjectifyWithAttributes(
                 matrix, type,
                 NrRows, arg[1],
                 NrColumns, arg[1],
-                IsOne, true );
+                IsOne, true,
+                IsZero, arg[1] <> 0,
+                ZeroRows, [ ],
+                NonZeroRows, [ 1 .. arg[1] ],
+                PositionOfFirstNonZeroEntryPerRow, [ 1 .. arg[1] ],
+                ZeroColumns, [ ],
+                NonZeroColumns, [ 1 .. arg[1] ],
+                PositionOfFirstNonZeroEntryPerColumn, [ 1 .. arg[1] ],
+                IsEmptyMatrix, arg[1] = 0,
+                IsPermutationMatrix, true,
+                IsSubidentityMatrix, true,
+                IsSpecialSubidentityMatrix, true,
+                IsInvertibleMatrix, true,
+                IsUpperStairCaseMatrix, true,
+                IsLowerStairCaseMatrix, true,
+                RowRankOfMatrix, arg[1],
+                ColumnRankOfMatrix, arg[1],
+                IsRightInvertibleMatrix, true,
+                IsLeftInvertibleMatrix, true,
+                IsLeftRegular, true,
+                IsRightRegular, true,
+                IsDiagonalMatrix, true,
+                IsUpperTriangularMatrix, true,
+                IsStrictUpperTriangularMatrix, false,
+                IsLowerTriangularMatrix, true,
+                IsStrictLowerTriangularMatrix, false,
+                IsScalarMatrix, true,
+                IsNoImmediateMethodsObject, true
+                );
+        
+        R!.MyCachedIdentityMatrices[arg[1]+1] := matrix;
+        
     else
         ## Objectify:
         ObjectifyWithAttributes(
@@ -3118,6 +3238,7 @@ InstallGlobalFunction( HomalgInitialMatrix,
                 matrix, type,
                 NrRows, arg[1],
                 NrColumns, arg[2],
+                IsNoImmediateMethodsObject, true,
                 IsInitialMatrix, true );
     else
         ## Objectify:
@@ -3212,6 +3333,7 @@ InstallGlobalFunction( HomalgInitialIdentityMatrix,
                 matrix, type,
                 NrRows, arg[1],
                 NrColumns, arg[1],
+                IsNoImmediateMethodsObject, true,
                 IsInitialIdentityMatrix, true );
     else
         ## Objectify:
@@ -3274,6 +3396,7 @@ InstallGlobalFunction( HomalgVoidMatrix,
                 matrix, type,
                 NrRows, arg[1],
                 NrColumns, arg[2],
+                IsNoImmediateMethodsObject, true,
                 IsVoidMatrix, true );
     else
         ## Objectify:

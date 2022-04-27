@@ -1198,11 +1198,11 @@ InstallMethod( UnionOfRowsOp,
         Error( "the matrices are not defined over identically the same ring\n" );
     fi;
     
-    if not ForAll( L, x -> NrColumns( x ) = c ) then
+    filtered_L := Filtered( L, x -> not IsEmptyMatrix( x ) );
+    
+    if not ForAll( filtered_L, x -> NrColumns( x ) = c ) then
         Error( "the matrices are not stackable, since they do not all have the same number of columns\n" );
     fi;
-    
-    filtered_L := Filtered( L, x -> not IsEmptyMatrix( x ) );
     
     if Length( filtered_L ) = 0 then
         
@@ -1233,6 +1233,8 @@ InstallMethod( UnionOfColumnsOp,
         
   function( R, nr_rows, L )
     local r, filtered_L;
+    
+    L := Filtered( L, l -> l <> fail );
     
     if not ForAll( L, IsHomalgMatrix ) then
         Error( "L must be a list of homalg matrices" );
